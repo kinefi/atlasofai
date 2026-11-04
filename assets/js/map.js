@@ -45,28 +45,32 @@ export function createMap(nodes, onSelect) {
         const nodesById = new Map(nodes.map((node) => [node.id, node]));
 
         nodes.forEach((sourceNode) => {
-            const targetNode = nodesById.get(sourceNode.nextNodeId);
-            if (!targetNode) return;
+            const targetNodeIds = sourceNode.nextNodeIds
+                || (sourceNode.nextNodeId === undefined ? [] : [sourceNode.nextNodeId]);
+            targetNodeIds.forEach((targetNodeId) => {
+                const targetNode = nodesById.get(targetNodeId);
+                if (!targetNode) return;
 
-            const source = projection(normalizeCoords(sourceNode.coords));
-            const target = projection(normalizeCoords(targetNode.coords));
-            const dx = target[0] - source[0];
-            const dy = target[1] - source[1];
-            const distance = Math.max(1, Math.hypot(dx, dy));
-            const bend = Math.min(42, Math.max(12, distance * 0.08));
-            const direction = sourceNode.id % 2 === 0 ? 1 : -1;
-            const controlX = (source[0] + target[0]) / 2 - (dy / distance) * bend * direction;
-            const controlY = (source[1] + target[1]) / 2 + (dx / distance) * bend * direction;
-            const frontFacing = isPointVisible(sourceNode.coords) && isPointVisible(targetNode.coords);
+                const source = projection(normalizeCoords(sourceNode.coords));
+                const target = projection(normalizeCoords(targetNode.coords));
+                const dx = target[0] - source[0];
+                const dy = target[1] - source[1];
+                const distance = Math.max(1, Math.hypot(dx, dy));
+                const bend = Math.min(42, Math.max(12, distance * 0.08));
+                const direction = sourceNode.id % 2 === 0 ? 1 : -1;
+                const controlX = (source[0] + target[0]) / 2 - (dy / distance) * bend * direction;
+                const controlY = (source[1] + target[1]) / 2 + (dx / distance) * bend * direction;
+                const frontFacing = isPointVisible(sourceNode.coords) && isPointVisible(targetNode.coords);
 
-            arcsGroup.append('path')
-                .attr('class', 'arc-line')
-                .attr('data-source-id', sourceNode.id)
-                .attr('data-target-id', targetNode.id)
-                .attr('data-front-facing', String(frontFacing))
-                .style('display', frontFacing ? null : 'none')
-                .attr('d', `M${source[0]},${source[1]}Q${controlX},${controlY} ${target[0]},${target[1]}`)
-                .attr('stroke-width', 2);
+                arcsGroup.append('path')
+                    .attr('class', 'arc-line')
+                    .attr('data-source-id', sourceNode.id)
+                    .attr('data-target-id', targetNode.id)
+                    .attr('data-front-facing', String(frontFacing))
+                    .style('display', frontFacing ? null : 'none')
+                    .attr('d', `M${source[0]},${source[1]}Q${controlX},${controlY} ${target[0]},${target[1]}`)
+                    .attr('stroke-width', 2);
+            });
         });
     }
 

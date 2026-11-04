@@ -1,0 +1,50 @@
+[
+  {
+    "id": "crawford-atlas-2021",
+    "author": "Kate Crawford",
+    "year": 2021,
+    "title": "Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence",
+    "type": "Kitap",
+    "url": "https://katecrawford.net/atlas"
+  },
+  {
+    "id": "anatomy-ai-2018",
+    "author": "Kate Crawford ve Vladan Joler",
+    "year": 2018,
+    "title": "Anatomy of an AI System: The Amazon Echo as an anatomical map of human labor, data and planetary resources",
+    "type": "Araştırma haritası",
+    "url": "https://anatomyof.ai/"
+  },
+  {
+    "id": "imagenet-cvpr-2009",
+    "author": "Jia Deng ve diğerleri",
+    "year": 2009,
+    "title": "ImageNet: A Large-Scale Hierarchical Image Database",
+    "type": "Makale",
+    "url": "https://image-net.org/static_files/papers/imagenet_cvpr09.pdf"
+  },
+  {
+    "id": "amnesty-automated-apartheid-2023",
+    "author": "Amnesty International",
+    "year": 2023,
+    "title": "Automated Apartheid: How facial recognition fragments, segregates and controls Palestinians in the OPT",
+    "type": "Rapor",
+    "url": "https://www.amnesty.org/en/documents/mde15/6701/2023/en/"
+  },
+  {
+    "id": "guardian-lavender-2024",
+    "author": "Harry Davies, Bethan McKernan ve Dan Sabbagh",
+    "year": 2024,
+    "title": "‘The machine did it coldly’: Israel is using AI to generate targets in Gaza, report says",
+    "type": "Makale",
+    "url": "https://www.theguardian.com/world/2024/apr/03/israel-gaza-ai-database-hamas-airstrikes"
+  },
+  {
+    "id": "972-lavender-2024",
+    "author": "Yuval Abraham",
+    "year": 2024,
+    "title": "‘Lavender’: The AI machine directing Israel’s bombing spree in Gaza",
+    "type": "Araştırmacı gazetecilik",
+    "url": "https://www.972mag.com/lavender-ai-israeli-army-gaza/"
+  }
+]

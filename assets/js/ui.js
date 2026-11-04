@@ -1,6 +1,7 @@
 import { createMap } from './map.js';
 
 let nodes = [];
+let sources = new Map();
 let mapController = null;
 let activeIndex = 0;
 let activeLayers = new Set();
@@ -9,11 +10,29 @@ let slideshowTimer = null;
 let storyObserver = null;
 
 async function loadNodes() {
-    const response = await fetch('assets/data/nodes.json');
-    if (!response.ok) throw new Error('Düğüm verileri yüklenemedi.');
-    const data = await response.json();
-    if (!Array.isArray(data)) throw new Error('Düğüm verileri bir liste olmalı.');
-    nodes = data;
+    const [nodesResponse, sourcesResponse] = await Promise.all([
+        fetch('assets/data/nodes.json'),
+        fetch('assets/data/sources.json')
+    ]);
+    if (!nodesResponse.ok) throw new Error('Aşama verileri yüklenemedi.');
+    if (!sourcesResponse.ok) throw new Error('Kaynak verileri yüklenemedi.');
+
+    const [nodeData, sourceData] = await Promise.all([
+        nodesResponse.json(),
+        sourcesResponse.json()
+    ]);
+    if (!Array.isArray(nodeData)) throw new Error('Aşama verileri bir liste olmalı.');
+    if (!Array.isArray(sourceData)) throw new Error('Kaynak verileri bir liste olmalı.');
+
+    sources = new Map(sourceData.map((source) => [source.id, source]));
+    for (const node of nodeData) {
+        for (const sourceId of node.sourceIds || []) {
+            if (!sources.has(sourceId)) {
+                throw new Error(`Aşama kaynağı bulunamadı: ${sourceId}`);
+            }
+        }
+    }
+    nodes = nodeData;
 }
 
 function previousChapter() {
@@ -52,14 +71,14 @@ function renderCategoryFilters() {
         filtersInitialized = true;
     }
 
-    filterBar.innerHTML = layers.map((layer) => `
-        <button type="button" class="category-filter ${activeLayers.has(layer) ? 'is-active' : ''}"
-            aria-pressed="${activeLayers.has(layer)}" data-layer="${layer}">
-            ${layer}
-        </button>
-    `).join('');
-
-    filterBar.querySelectorAll('.category-filter').forEach((button) => {
+    filterBar.replaceChildren();
+    layers.forEach((layer) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `category-filter ${activeLayers.has(layer) ? 'is-active' : ''}`;
+        button.setAttribute('aria-pressed', String(activeLayers.has(layer)));
+        button.dataset.layer = layer;
+        button.textContent = layer;
         button.addEventListener('click', () => {
             const layer = button.dataset.layer;
             if (activeLayers.has(layer)) activeLayers.delete(layer);
@@ -67,6 +86,7 @@ function renderCategoryFilters() {
             renderCategoryFilters();
             applyFilters();
         });
+        filterBar.append(button);
     });
 }
 
@@ -87,16 +107,29 @@ function applyFilters() {
 
 function renderChapterButtons() {
     const chapterBar = document.getElementById('chapter-bar');
-    chapterBar.innerHTML = nodes.map((node, index) => `
-        <button type="button" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap"
-            data-index="${index}" aria-current="false">
-            <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center">${index + 1}</span>
-            <span class="block text-left">${node.title.replace(/^\d+\.\s*/, '')}<small class="block text-[9px] text-slate-500">${node.location}</small></span>
-        </button>
-    `).join('');
+    chapterBar.replaceChildren();
+    nodes.forEach((node, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap';
+        button.dataset.index = index;
+        button.setAttribute('aria-current', 'false');
 
-    chapterBar.querySelectorAll('.chap-btn').forEach((button) => {
+        const number = document.createElement('span');
+        number.className = 'w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center';
+        number.textContent = String(index + 1);
+
+        const label = document.createElement('span');
+        label.className = 'block text-left';
+        label.append(document.createTextNode(node.title));
+        const location = document.createElement('small');
+        location.className = 'block text-[9px] text-slate-500';
+        location.textContent = node.location;
+        label.append(location);
+
+        button.append(number, label);
         button.addEventListener('click', () => selectChapter(Number(button.dataset.index)));
+        chapterBar.append(button);
     });
 
     if (storyObserver) storyObserver.disconnect();
@@ -123,26 +156,44 @@ function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
     mapController?.setActiveNode(node.id, coords);
 
     document.getElementById('detail-img').src = node.img;
-    document.getElementById('detail-img').alt = `${node.mapLabel || node.name} konum görseli`;
+    document.getElementById('detail-img').alt = node.imageAlt || `${node.mapLabel || node.name} konum görseli`;
     const imageCredit = node.imageCredit;
     document.getElementById('detail-image-credit').hidden = !imageCredit;
     if (imageCredit) {
         const sourceLink = document.getElementById('detail-image-source');
         sourceLink.href = imageCredit.sourceUrl;
         sourceLink.textContent = imageCredit.label;
-        document.getElementById('detail-image-license').href = imageCredit.licenseUrl;
+        const licenseLink = document.getElementById('detail-image-license');
+        licenseLink.href = imageCredit.licenseUrl;
+        licenseLink.textContent = imageCredit.licenseLabel;
     }
     document.getElementById('detail-category').innerText = node.layer || node.category;
     document.getElementById('detail-coords').innerText = `${coords[1]}°, ${coords[0]}°`;
     document.getElementById('detail-location').innerText = locationLabel || node.location;
     document.getElementById('detail-title').innerText = node.title;
     document.getElementById('detail-desc').innerText = node.desc;
+    const sourceList = document.getElementById('detail-sources-list');
+    const sourceSection = document.getElementById('detail-sources');
+    sourceList.replaceChildren();
+    (node.sourceIds || []).forEach((sourceId) => {
+        const source = sources.get(sourceId);
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = source.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'break-words text-cyan-400 hover:text-cyan-300';
+        link.textContent = `${source.author} (${source.year}) · ${source.type} — ${source.title}`;
+        item.append(link);
+        sourceList.append(item);
+    });
+    sourceSection.hidden = !sourceList.childElementCount;
     const wikipediaLink = document.getElementById('detail-wikipedia');
     wikipediaLink.href = node.wikipediaUrl || '#';
     wikipediaLink.hidden = !node.wikipediaUrl;
     document.getElementById('metric-eco').innerText = node.eco;
     document.getElementById('metric-labor').innerText = node.labor;
-    document.getElementById('detail-quote').innerText = `"${node.quote}"`;
+    document.getElementById('detail-insight').innerText = node.quote;
 }
 
 function openImageLightbox() {

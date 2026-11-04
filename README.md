@@ -70,7 +70,8 @@ atlasofai/
 │   ├── css/
 │   │   └── styles.css
 │   ├── data/
-│   │   └── nodes.json
+│   │   ├── nodes.json
+│   │   └── sources.json
 │   └── js/
 │       ├── map.js
 │       └── ui.js
@@ -80,12 +81,18 @@ atlasofai/
 
 ---
 
+## Yeni Aşama Ekleme
+
+Haritadaki aşama kaynakları [assets/data/sources.json](assets/data/sources.json) dosyasında tutulur; her düğüm bunlara `sourceIds` ile bağlanır. Kaynakların aşamaya özgü atıfları bilgi panelinde gösterilir. Filistin'deki yüz tanıma ve Gazze'deki hedef belirleme aşamaları, kendi rapor ve haber kaynaklarına bağlanır; haberlerde aktarılan iddialar ile resmî yanıtlar açıklama metninde birbirinden ayrılır.
+
+Yeni bir aşama eklerken `nodes.json` içinde benzersiz bir `id`, harita koordinatı, `nextNodeIds` ve `sourceIds` tanımlayın; `sources.json` içine de kaynak künyesini ekleyin. `nextNodeIds` birden fazla bağlantıya izin verir; böylece harita paralel veri, donanım ve kullanım akışlarını gösterebilir. Aşamalar listedeki sıralarına göre numaralandırılır.
+
 ## Kaynakça
 
 Bu çalışma, aşağıdaki akademik ve sanatsal araştırmalara dayanan eğitim ve veri gazeteciliği amaçlı bir projedir:
 
 - Crawford, K. (2021). [Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence](https://katecrawford.net/atlas). Yale University Press.
-- Joler, V., & Parikka, J. (2018). [Anatomy of an AI System: The Amazon Echo as an anatomical map of human labor, data and planetary resources](https://anatomyof.ai/). Share Lab & AI Now Institute.
+- Crawford, K., & Joler, V. (2018). [Anatomy of an AI System: The Amazon Echo as an anatomical map of human labor, data and planetary resources](https://anatomyof.ai/). Share Lab & AI Now Institute.
 
 ## Lisans
 
