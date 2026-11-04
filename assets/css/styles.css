@@ -34,8 +34,8 @@ body {
 .arc-line {
     fill: none;
     stroke: rgba(0, 240, 255, 0.45);
-    stroke-dasharray: 6,4;
-    opacity: 0.5;
+    stroke-dasharray: 8, 12;
+    opacity: 0.55;
     transition: opacity 0.25s ease, stroke-width 0.25s ease, stroke 0.25s ease;
 }
 
@@ -46,22 +46,28 @@ body {
 }
 
 .pulse-node {
+    transform-box: fill-box;
     transform-origin: center;
     opacity: 0.18;
+    transition: transform 0.55s ease, opacity 0.55s ease;
 }
 
 .map-node .node-halo {
     fill: rgba(0, 240, 255, 0.12);
     stroke: rgba(0, 240, 255, 0.45);
     stroke-width: 1.2;
-    transition: fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.55s ease, fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
 }
 
 .map-node .node-core {
     fill: #0a0e17;
     stroke: rgba(148, 163, 184, 0.9);
     stroke-width: 1.8;
-    transition: fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.55s ease, fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
 }
 
 .map-node text {
@@ -73,12 +79,14 @@ body {
     fill: rgba(0, 240, 255, 0.24);
     stroke: #00f0ff;
     stroke-width: 1.8;
+    transform: scale(1.18);
 }
 
 .map-node.active .node-core {
     fill: rgba(8, 16, 24, 0.98);
     stroke: #00f0ff;
     stroke-width: 2.7;
+    transform: scale(1.12);
 }
 
 .map-node.active text {

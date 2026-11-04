@@ -2,66 +2,127 @@ const fallbackNodes = [
     {
         id: 0,
         name: 'Salar de Atacama & Kolwezi',
+        mapLabel: 'Atacama ve Kolwezi Madenleri',
         location: 'Şili & Kongo Dem. Cumhuriyeti',
         coords: [-68.2, -23.5],
         category: 'Hammadde Çıkarma',
         title: '1. Lityum & Kobalt Madenciliği',
         desc: 'Yapay zekâ çiplerinin, mobil cihazların ve veri merkezi yedek güç ünitelerinin ihtiyaç duyduğu lityum ve kobalt madenleri burada çıkarılır. Şili\'deki Salar de Atacama tuzlasında 1 ton lityum elde etmek için 2.2 milyon litre su buharlaştırılır.',
-        eco: 'Su Yataklarının Kuruması, Zehirli Atık Göletleri',
-        labor: 'Ağır İş Koşulları, Asgari Ücretin Altında Tehlikeli Emek',
-        quote: 'Yapay zekânın başlangıç noktası algoritmalar değil, Dünya\'nın tektonik katmanlarındaki madenlerdir.',
+        eco: 'Su yetersizliği, tuz gölleri ve ağır metal kirliliği',
+        labor: 'Ağır iş koşulları ve tehlikeli madencilik emekçiliği',
+        quote: 'Yapay zekânın başlangıç noktası algoritmalar değil, Dünya\'nın alt katmanlarında çıkarılan madenlerdir.',
         img: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80'
     },
     {
         id: 1,
-        name: 'TSMC Semiconductor Fab',
-        location: 'Hsinchu, Tayvan',
-        coords: [120.96, 24.81],
-        category: 'Yarı İletken Üretimi',
-        title: '2. Gelişmiş Mikroçip Fabrikasyonu',
-        desc: 'Saf silisyum madenleri ve nadir toprak elementleri, mikroskobik ölçekte NVIDIA ve Apple çiplerine dönüştürülür. Çip lithography süreçleri devasa miktarda elektrik ve aşırı derece arıtılmış ultra saf su gerektirir.',
-        eco: 'Günlük Yüzbinlerce Ton Su & Dev Karbon Ayak İzi',
-        labor: '7/24 Temiz Oda (Cleanroom) Mühendisliği & Vardiyalı Sistem',
-        quote: 'En gelişmiş zekâ, gezegenin en hassas ve enerji yoğun üretim tesislerinde şekillenir.',
+        name: 'Baotou Rare Earth Basin',
+        mapLabel: 'Baotou Nadir Toprak Havzası',
+        location: 'İç Moğolistan, Çin',
+        coords: [109.8, 41.6],
+        category: 'Nadir Toprak İşleme',
+        title: '2. Nadir Toprak ve Kimyasal Rafinasyon',
+        desc: 'Manyetik alanlar, ekranlar ve çipler için gerekli olan nadir toprak elementleri burada işlenir. Arıtım sırasında büyük miktarda kimyasal atık ve su kirliliği oluşur.',
+        eco: 'Kimyasal atık, su kirliliği ve arazi bozulması',
+        labor: 'Yöntemli üretim, düşük ücretli kimyasal iş gücü',
+        quote: 'Bir modelin görünmeyen ölçüsü, ekrandaki metin değil, rafinasyon tesislerinin kimyasal yüküdür.',
         img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'
     },
     {
         id: 2,
-        name: 'Nairobi & Caracas Veri Merkezleri',
-        location: 'Nairobi (Kenya) & Caracas (Venezuela)',
+        name: 'Silicon Valley AI Design',
+        mapLabel: 'Silikon Vadisi Çip Tasarımı',
+        location: 'Kaliforniya, ABD',
+        coords: [-122.42, 37.77],
+        category: 'Çip Tasarımı',
+        title: '3. Yapay Zekâ Çiplerinin Tasarımı',
+        desc: 'NVIDIA, AMD ve Apple gibi şirketler, yapay zekâ hızını artıran GPU ve NPU tasarımlarını burada geliştirir. Bu tasarımlar, ağın bütün fiziksel altyapısını yöneten mantıksal merkezlerdir.',
+        eco: 'Yüksek enerji tüketimi ve tasarım ağında yoğun veri kullanımı',
+        labor: 'Yüksek vasıflı mühendislik, araştırma ve ürün tasarımı',
+        quote: 'Bilgisayarın özü, bir çipin mimarisinde değil, insan zekâsının uzmanlık biçiminde saklıdır.',
+        img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+        id: 3,
+        name: 'TSMC Semiconductor Fab',
+        mapLabel: 'TSMC Çip Fabrikası',
+        location: 'Hsinchu, Tayvan',
+        coords: [120.96, 24.81],
+        category: 'Yarı İletken Üretimi',
+        title: '4. Gelişmiş Mikroçip Fabrikasyonu',
+        desc: 'Saf silisyum ve ultra saf suyla çalışan litografi süreçleri, çipleri mikroskobik nano ölçekte üretir. Bu organik olmayan üretim, en hassas ve enerji yoğun aşamalardan geçer.',
+        eco: 'Günlük yüzbinlerce ton su ve yüksek karbon ayak izi',
+        labor: 'Temiz oda mühendisliği, vardiyalı üretim ve teknik bakım',
+        quote: 'En gelişmiş zekâ, gezegenin en hassas ve enerji yoğun üretim tesislerinde şekillenir.',
+        img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+        id: 4,
+        name: 'Nairobi & Manila',
+        mapLabel: 'Nairobi ve Manila Veri İşçiliği',
+        location: 'Kenya & Filipinler',
         coords: [36.82, -1.29],
         category: 'Veri Etiketleme',
-        title: '3. Algoritmik Sömürü ve Etiketleme',
-        desc: 'Yapay zekâ modellerinin şiddeti, nefret söylemini tanıması veya görselleri sınıflandırması için binlerce düşük ücretli işçi her gün milyonlarca veriyi manuel olarak etiketler.',
-        eco: 'Düşük Fiziksel İz / Yüksek Psikolojik Yük',
-        labor: 'Saatlik 1.2$ - 2.0$ Ücret, Ağır Travmatik İçerik İnceleme',
+        title: '5. İnsan Duygu ve Görüntü Etiketleme',
+        desc: 'Binlerce işçi, modelin güvenlik ve açıklama yeteneklerini oluşturmak için yüzlerce bin veri parçasını etiketler. Bu süreç yalnızca algoritma değil, insan gözünün ve travmasının bir parçasıdır.',
+        eco: 'Düşük fiziksel iz, yüksek psikolojik yıpranma',
+        labor: 'Düşük ücretli onaylama işçiliği ve travmatik içerik kategorileştirme',
         quote: 'Makine öğrenimi olarak adlandırdığımız şey, görünmeyen insan emeğinin anonimleştirilmesidir.',
         img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80'
     },
     {
-        id: 3,
+        id: 5,
         name: 'Data Center Alley (AWS / Azure)',
+        mapLabel: 'Kuzey Virginia Veri Merkezleri',
         location: 'Northern Virginia, ABD',
         coords: [-77.48, 39.04],
         category: 'Bulut Hesaplama',
-        title: '4. Hipersosyal Veri Merkezleri & Enerji',
-        desc: 'Dünyadaki internet trafiğinin ve yapay zekâ model eğitimlerinin %70\'inin geçtiği veri merkezleri burada yer alır. LLM modellerini eğitmek ve çalıştırmak bir şehrin yıllık elektrik ihtiyacına denk enerji harcar.',
-        eco: 'Devasa Termal Isı Salınımı & Soğutma Suyu Tüketimi',
-        labor: '7/24 Altyapı ve Güvenlik Yönetimi',
-        quote: 'Yapay zekâ modeli eğitmek, bir uçağın dünyayı yüzlerce kez turlamasına denk karbon salar.',
+        title: '6. Hipersosyal Veri Merkezleri ve Enerji',
+        desc: 'Dünyadaki internet trafiğinin ve yapay zekâ model eğitimlerinin çok büyük kısmı burada geçer. Yüksek performanslı GPU kümeleri, büyük su ve elektrik tüketimiyle çalışır.',
+        eco: 'Devasa ısı salınımı, soğutma suyu ve karbon yükü',
+        labor: '7/24 altyapı, güvenlik ve operasyon yönetimi',
+        quote: 'Yapay zekâ modeli eğitmek, bir şehir gibi enerji ve su tüketir.',
         img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80'
     },
     {
-        id: 4,
+        id: 6,
+        name: 'Singapore AI Training Cluster',
+        mapLabel: 'Singapur Yapay Zekâ Kümesi',
+        location: 'Singapur',
+        coords: [103.82, 1.35],
+        category: 'Model Eğitimi',
+        title: '7. Büyük Dil Modeli Eğitimi',
+        desc: 'Yapay zekâ sistemleri, zengin veri setleri üzerinde küresel çapta dağıtılmış GPU kümeleriyle eğitilir. Bu süreç, öğrenme için gerekli olan enerji ve bant genişliği maliyetini dramatik biçimde artırır.',
+        eco: 'Yüksek enerji tüketimi ve su soğutma gereksinimi',
+        labor: 'Mühendislik operasyonları, veri bilimciler ve altyapı ekipleri',
+        quote: 'Bir modelin konuşma gücü, gerçekte çok sayıda ağın, enerji akışının ve operasyonel ısının sonucu olur.',
+        img: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+        id: 7,
+        name: 'Tokyo & Seoul Device Layer',
+        mapLabel: 'Tokyo ve Seul Cihaz Katmanı',
+        location: 'Japonya & Güney Kore',
+        coords: [139.69, 35.68],
+        category: 'Kullanıcı Cihazları',
+        title: '8. Son Kullanıcı Cihazları ve Uygulama Katmanı',
+        desc: 'Telefonlar, masaüstü sistemler ve kişisel yardımcılar, modelin her gün yeniden kullanıldığı son kullanım noktalarıdır. Bu cihazlar aynı zamanda emisyon ve elektronik tüketim zincirinin parçası haline gelir.',
+        eco: 'Hızlı teknoloji değişimi, tüketim döngüsü ve enerji kullanımı',
+        labor: 'Üretim, montaj ve bakım iş gücü',
+        quote: 'Yapay zekâ yalnızca sunucu odalarında değil; günlük hayatın en küçük ekranlarında da iş görür.',
+        img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+        id: 8,
         name: 'Agbogbloshie & Guiyu',
+        mapLabel: 'Agbogbloshie ve Guiyu E-Atık Sahaları',
         location: 'Accra (Gana) & Guiyu (Çin)',
         coords: [-0.22, 5.55],
         category: 'E-Atık & Yok Oluş',
-        title: '5. Elektronik Atık Mezarlığı',
-        desc: 'Ömrü 2-3 yılda tükenen yapay zekâ sunucuları, akıllı hoparlörler ve çipler Batı ülkelerinden e-atık olarak Afrika ve Asya\'daki hurdalıklara gönderilir. Kurşun ve cıva toprağa karışır.',
-        eco: 'Toprak ve Nehirlerde Zehirli Ağır Metal Birikimi',
-        labor: 'Kayıtsız Atık Yakma ve Çıplak Elle Bakır Ayrıştırma',
-        quote: 'Bir cihazın yaşam döngüsü tüketiciyle bitmez; gelişmekte olan ülkelerin toprağında son bulur.',
+        title: '9. Elektronik Atık Mezarlığı',
+        desc: 'Ömrü 2-3 yılda tükenen yapay zekâ sunucuları, akıllı cihazlar ve çipler Batı ülkelerinden e-atık olarak Afrika ve Asya\'daki hurdalıklara gönderilir. Kurşun, cıva ve diğer ağır metaller toprak ve nehire karışır.',
+        eco: 'Toprak ve su kirliliği, toksik birikim ve ekolojik yıkım',
+        labor: 'Kayıtsız yakma ve çıplak elle bakır ayrıştırma',
+        quote: 'Bir cihazın yaşam döngüsü tüketiciyle bitmez; gelişmekte olan ülkelerin topraklarında son bulur.',
         img: 'https://images.unsplash.com/photo-1532996122754-e3b4d32a0a57?auto=format&fit=crop&w=800&q=80'
     }
 ];
@@ -87,6 +148,24 @@ let svg, g, path, projection, zoom;
 let isGlobe = false;
 let worldData = null;
 let activeIndex = 0;
+
+function renderChapterButtons() {
+    const chapterBar = document.getElementById('chapter-bar');
+    if (!chapterBar) return;
+
+    chapterBar.innerHTML = nodes.map((node, idx) => {
+        const activeClass = idx === activeIndex
+            ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 shadow-lg'
+            : 'text-slate-400 hover:text-slate-200';
+
+        return `
+            <button onclick="selectChapter(${idx})" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium ${activeClass} transition flex items-center gap-2 whitespace-nowrap" data-index="${idx}">
+                <span class="w-4 h-4 rounded-full ${idx === activeIndex ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'} text-[10px] font-mono flex items-center justify-center">${idx + 1}</span>
+                <span>${node.title.replace(/^\d+\.\s*/, '')}</span>
+            </button>
+        `;
+    }).join('');
+}
 
 function initMap() {
     const container = document.getElementById('map-holder');
@@ -117,6 +196,10 @@ function initMap() {
         .scaleExtent([1, 18])
         .on('zoom', (event) => {
             g.attr('transform', event.transform);
+            g.selectAll('.map-node').attr('transform', function () {
+                const scale = 1 / event.transform.k;
+                return `translate(${this.dataset.x}, ${this.dataset.y}) scale(${scale})`;
+            });
         });
 
     svg.call(zoom);
@@ -177,31 +260,44 @@ function drawFlowArcs() {
     const arcsGroup = g.append('g').attr('class', 'arcs-layer');
 
     for (let i = 0; i < nodes.length - 1; i++) {
-        const source = nodes[i].coords;
-        const target = nodes[i + 1].coords;
-
-        const geoArc = {
-            type: 'LineString',
-            coordinates: [source, target]
-        };
+        const source = projection(normalizeCoords(nodes[i].coords));
+        const target = projection(normalizeCoords(nodes[i + 1].coords));
+        const dx = target[0] - source[0];
+        const dy = target[1] - source[1];
+        const distance = Math.max(1, Math.hypot(dx, dy));
+        const bend = Math.min(42, Math.max(12, distance * 0.08));
+        const direction = i % 2 === 0 ? 1 : -1;
+        const controlX = (source[0] + target[0]) / 2 - (dy / distance) * bend * direction;
+        const controlY = (source[1] + target[1]) / 2 + (dx / distance) * bend * direction;
 
         arcsGroup.append('path')
-            .datum(geoArc)
             .attr('class', 'arc-line')
             .attr('data-index', i)
-            .attr('d', path)
+            .attr('d', `M${source[0]},${source[1]}Q${controlX},${controlY} ${target[0]},${target[1]}`)
             .attr('stroke-width', 2);
     }
+}
+
+function normalizeCoords(coords) {
+    let [lng, lat] = coords;
+
+    if (lng > 180) lng -= 360;
+    if (lng < -180) lng += 360;
+
+    return [lng, lat];
 }
 
 function drawNodes() {
     const nodesGroup = g.append('g').attr('class', 'nodes-layer');
 
     nodes.forEach((node, idx) => {
-        const [x, y] = projection(node.coords);
+        const normalized = normalizeCoords(node.coords);
+        const [x, y] = projection(normalized);
 
         const nodeG = nodesGroup.append('g')
             .attr('transform', `translate(${x}, ${y})`)
+            .attr('data-x', x)
+            .attr('data-y', y)
             .attr('class', `map-node cursor-pointer ${idx === activeIndex ? 'active' : ''}`)
             .attr('data-index', idx)
             .on('click', () => selectChapter(idx));
@@ -219,7 +315,7 @@ function drawNodes() {
             .attr('fill', '#ffffff');
 
         nodeG.append('text')
-            .text(`${idx + 1}. ${node.name.split('&')[0]}`)
+            .text(`${idx + 1}. ${node.mapLabel || node.name.split('&')[0].trim()}`)
             .attr('x', 10)
             .attr('y', 4)
             .attr('font-size', '10px')
@@ -258,17 +354,6 @@ function selectChapter(index) {
     document.getElementById('metric-labor').innerText = node.labor;
     document.getElementById('detail-quote').innerText = `"${node.quote}"`;
 
-    const [x, y] = projection(node.coords);
-    const scale = 4.5;
-    const translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-    svg.transition()
-        .duration(1600)
-        .ease(d3.easeCubicInOut)
-        .call(
-            zoom.transform,
-            d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
-        );
 }
 
 function resetZoom() {
@@ -303,6 +388,7 @@ function toggleProjection() {
 
 window.onload = async function () {
     await loadNodes();
+    renderChapterButtons();
     initMap();
 };
 
