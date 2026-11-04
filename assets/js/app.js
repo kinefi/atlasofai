@@ -188,6 +188,7 @@ function drawFlowArcs() {
         arcsGroup.append('path')
             .datum(geoArc)
             .attr('class', 'arc-line')
+            .attr('data-index', i)
             .attr('d', path)
             .attr('stroke-width', 2);
     }
@@ -201,20 +202,17 @@ function drawNodes() {
 
         const nodeG = nodesGroup.append('g')
             .attr('transform', `translate(${x}, ${y})`)
-            .attr('class', 'cursor-pointer')
+            .attr('class', `map-node cursor-pointer ${idx === activeIndex ? 'active' : ''}`)
+            .attr('data-index', idx)
             .on('click', () => selectChapter(idx));
 
         nodeG.append('circle')
             .attr('r', 12)
-            .attr('fill', '#00f0ff')
-            .attr('opacity', 0.2)
-            .attr('class', 'pulse-node');
+            .attr('class', 'pulse-node node-halo');
 
         nodeG.append('circle')
             .attr('r', 6)
-            .attr('fill', '#0a0e17')
-            .attr('stroke', '#00f0ff')
-            .attr('stroke-width', 2);
+            .attr('class', 'node-core');
 
         nodeG.append('circle')
             .attr('r', 2.5)
@@ -224,7 +222,6 @@ function drawNodes() {
             .text(`${idx + 1}. ${node.name.split('&')[0]}`)
             .attr('x', 10)
             .attr('y', 4)
-            .attr('fill', '#cbd5e1')
             .attr('font-size', '10px')
             .attr('font-family', 'JetBrains Mono')
             .attr('class', 'pointer-events-none drop-shadow');
@@ -241,6 +238,14 @@ function selectChapter(index) {
         } else {
             btn.className = 'chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap';
         }
+    });
+
+    document.querySelectorAll('.map-node').forEach((item, idx) => {
+        item.classList.toggle('active', idx === index);
+    });
+
+    document.querySelectorAll('.arc-line').forEach((line, idx) => {
+        line.classList.toggle('arc-focused', idx === index || idx === index - 1);
     });
 
     document.getElementById('detail-img').src = node.img;

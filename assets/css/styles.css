@@ -33,24 +33,56 @@ body {
 
 .arc-line {
     fill: none;
-    stroke: url(#arc-gradient);
+    stroke: rgba(0, 240, 255, 0.45);
     stroke-dasharray: 6,4;
-    animation: dash 30s linear infinite;
+    opacity: 0.5;
+    transition: opacity 0.25s ease, stroke-width 0.25s ease, stroke 0.25s ease;
 }
 
-@keyframes dash {
-    to { stroke-dashoffset: -1000; }
+.arc-line.arc-focused {
+    stroke: rgba(255, 75, 62, 1);
+    opacity: 0.95;
+    stroke-width: 2.6;
 }
 
 .pulse-node {
     transform-origin: center;
-    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    opacity: 0.18;
 }
 
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 0.8; }
-    50% { transform: scale(1.8); opacity: 0.2; }
-    100% { transform: scale(0.8); opacity: 0.8; }
+.map-node .node-halo {
+    fill: rgba(0, 240, 255, 0.12);
+    stroke: rgba(0, 240, 255, 0.45);
+    stroke-width: 1.2;
+    transition: fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+}
+
+.map-node .node-core {
+    fill: #0a0e17;
+    stroke: rgba(148, 163, 184, 0.9);
+    stroke-width: 1.8;
+    transition: fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+}
+
+.map-node text {
+    fill: rgba(203, 213, 225, 0.82);
+    transition: fill 0.25s ease;
+}
+
+.map-node.active .node-halo {
+    fill: rgba(0, 240, 255, 0.24);
+    stroke: #00f0ff;
+    stroke-width: 1.8;
+}
+
+.map-node.active .node-core {
+    fill: rgba(8, 16, 24, 0.98);
+    stroke: #00f0ff;
+    stroke-width: 2.7;
+}
+
+.map-node.active text {
+    fill: #e2e8f0;
 }
 
 ::-webkit-scrollbar { width: 5px; }
