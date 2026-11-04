@@ -124,6 +124,14 @@ function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
 
     document.getElementById('detail-img').src = node.img;
     document.getElementById('detail-img').alt = `${node.mapLabel || node.name} konum görseli`;
+    const imageCredit = node.imageCredit;
+    document.getElementById('detail-image-credit').hidden = !imageCredit;
+    if (imageCredit) {
+        const sourceLink = document.getElementById('detail-image-source');
+        sourceLink.href = imageCredit.sourceUrl;
+        sourceLink.textContent = imageCredit.label;
+        document.getElementById('detail-image-license').href = imageCredit.licenseUrl;
+    }
     document.getElementById('detail-category').innerText = node.layer || node.category;
     document.getElementById('detail-coords').innerText = `${coords[1]}°, ${coords[0]}°`;
     document.getElementById('detail-location').innerText = locationLabel || node.location;

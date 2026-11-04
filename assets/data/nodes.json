@@ -3,7 +3,7 @@
     "id": 0,
     "name": "Salar de Atacama & Kolwezi",
     "mapLabel": "Atacama lityum madeni",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Salar_de_Atacama",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/Salar_de_Atacama",
     "layer": "Hammadde Çıkarımı",
     "location": "Şili & Kongo Dem. Cumhuriyeti",
     "coords": [-68.2, -23.5],
@@ -17,13 +17,18 @@
     "eco": "Su yetersizliği, tuz gölleri ve ağır metal kirliliği",
     "labor": "Ağır iş koşulları ve tehlikeli madencilik emekçiliği",
     "quote": "Yapay zekânın başlangıç noktası algoritmalar değil, Dünya'nın alt katmanlarında çıkarılan madenlerdir.",
-    "img": "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80"
+    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Salar_de_Atacama%2C_Chile_ESA386674.jpg/960px-Salar_de_Atacama%2C_Chile_ESA386674.jpg",
+    "imageCredit": {
+      "label": "ESA / Copernicus Sentinel-2A",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salar_de_Atacama,_Chile_ESA386674.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/igo/"
+    }
   },
   {
     "id": 1,
     "name": "Baotou Rare Earth Basin",
     "mapLabel": "Baotou Nadir Toprak Havzası",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Rare-earth_element",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/Nadir_toprak_elementleri",
     "layer": "Üretim",
     "location": "İç Moğolistan, Çin",
     "coords": [109.8, 41.6],
@@ -40,7 +45,7 @@
     "id": 2,
     "name": "Silicon Valley AI Design",
     "mapLabel": "Silikon Vadisi Çip Tasarımı",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Silicon_Valley",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/Silikon_Vadisi",
     "layer": "Üretim",
     "location": "Kaliforniya, ABD",
     "coords": [-122.42, 37.77],
@@ -57,7 +62,7 @@
     "id": 3,
     "name": "TSMC Semiconductor Fab",
     "mapLabel": "TSMC Çip Fabrikası",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/TSMC",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/TSMC",
     "layer": "Üretim",
     "location": "Hsinchu, Tayvan",
     "coords": [120.96, 24.81],
@@ -74,7 +79,7 @@
     "id": 4,
     "name": "Nairobi & Manila",
     "mapLabel": "Nairobi veri işçiliği",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Data_labeling",
+    "wikipediaUrl": "https://tr.wikipedia.org/w/index.php?search=Veri+etiketleme",
     "layer": "İnsan Emeği",
     "location": "Kenya & Filipinler",
     "coords": [36.82, -1.29],
@@ -94,7 +99,7 @@
     "id": 5,
     "name": "Data Center Alley (AWS / Azure)",
     "mapLabel": "Kuzey Virginia Veri Merkezleri",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Data_center",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/Veri_merkezi",
     "layer": "Altyapı ve Hesaplama",
     "location": "Northern Virginia, ABD",
     "coords": [-77.48, 39.04],
@@ -111,7 +116,7 @@
     "id": 6,
     "name": "Singapore AI Training Cluster",
     "mapLabel": "Singapur Yapay Zekâ Kümesi",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/Yapay_zeka",
     "layer": "Altyapı ve Hesaplama",
     "location": "Singapur",
     "coords": [103.82, 1.35],
@@ -128,7 +133,7 @@
     "id": 7,
     "name": "Tokyo & Seoul Device Layer",
     "mapLabel": "Tokyo cihaz katmanı",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Consumer_electronics",
+    "wikipediaUrl": "https://tr.wikipedia.org/wiki/T%C3%BCketici_elektroni%C4%9Fi",
     "layer": "Kullanım",
     "location": "Japonya & Güney Kore",
     "coords": [139.69, 35.68],
@@ -148,7 +153,7 @@
     "id": 8,
     "name": "Agbogbloshie & Guiyu",
     "mapLabel": "Agbogbloshie e-atık sahası",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Agbogbloshie",
+    "wikipediaUrl": "https://tr.wikipedia.org/w/index.php?search=Agbogbloshie",
     "layer": "Yaşam Sonu",
     "location": "Accra (Gana) & Guiyu (Çin)",
     "coords": [-0.22, 5.55],
@@ -161,6 +166,11 @@
     "eco": "Toprak ve su kirliliği, toksik birikim ve ekolojik yıkım",
     "labor": "Kayıtsız yakma ve çıplak elle bakır ayrıştırma",
     "quote": "Bir cihazın yaşam döngüsü tüketiciyle bitmez; gelişmekte olan ülkelerin topraklarında son bulur.",
-    "img": "https://images.unsplash.com/photo-1532996122754-e3b4d32a0a57?auto=format&fit=crop&w=800&q=80"
+    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c6/Day_4_Agbogloshie_%2825891018478%29.jpg/960px-Day_4_Agbogloshie_%2825891018478%29.jpg",
+    "imageCredit": {
+      "label": "Fairphone — Day 4: Agbogloshie",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Day_4_Agbogloshie_(25891018478).jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+    }
   }
 ]

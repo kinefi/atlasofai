@@ -48,25 +48,21 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <a href="https://github.com/kinefi/atlasofai" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+            <a href="https://www.github.com/kinefi/atlasofai" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
                 <i class="fa-brands fa-github text-cyan-400"></i>
                 <span>Açık kaynak</span>
             </a>
-            <button onclick="window.resetZoom()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-compress text-cyan-400"></i>
-                <span class="hidden md:inline">Haritayı Sıfırla</span>
-            </button>
-            <button onclick="window.toggleProjection()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-globe text-accent"></i>
-                <span id="proj-label">Düz Projeksiyon</span>
-            </button>
+            <a href="https://www.iyimserirade.org/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-leaf text-emerald-400" aria-hidden="true"></i>
+                <span>İyimser İrade</span>
+            </a>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden">
+    <main class="flex-1 min-h-0 grid grid-cols-1 grid-rows-[38%_62%] lg:grid-cols-12 lg:grid-rows-1 relative overflow-hidden">
         
-        <aside class="lg:col-span-3 bg-cardbg flex flex-col h-[38vh] lg:h-[calc(100vh-61px)] border-t lg:border-t-0 border-r border-slate-800 order-first lg:order-none">
+        <aside class="lg:col-span-3 bg-cardbg flex flex-col h-full min-h-0 border-t lg:border-t-0 border-r border-slate-800 order-first lg:order-none">
             <div class="p-3 border-b border-slate-800 bg-slate-950/60">
                 <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400 mb-2">Aşamalar</div>
                 <div class="flex items-center gap-2 mb-3">
@@ -89,6 +85,11 @@
                 <div class="relative h-36 sm:h-40 w-full bg-slate-950 overflow-hidden flex-shrink-0">
                     <img id="detail-img" src="" alt="Aşama görselini büyüt" role="button" tabindex="0" onclick="openImageLightbox()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openImageLightbox()}" class="w-full h-full object-cover transition duration-700 cursor-zoom-in">
                     <div class="absolute inset-0 bg-gradient-to-t from-cardbg via-cardbg/30 to-transparent"></div>
+                    <div id="detail-image-credit" hidden class="absolute bottom-2 right-2 z-10 rounded bg-slate-950/80 px-2 py-1 text-[9px] font-mono text-slate-200">
+                        <a id="detail-image-source" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300"></a>
+                        <span aria-hidden="true"> · </span>
+                        <a id="detail-image-license" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-300">CC BY-SA 3.0 IGO</a>
+                    </div>
                     <div class="absolute top-3 left-3 flex items-center gap-2">
                         <span id="detail-category" class="px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-accent text-white shadow-lg uppercase tracking-wider">
                             Hammadde
@@ -139,9 +140,20 @@
             </div>
         </aside>
 
-        <section class="lg:col-span-9 relative h-[62vh] lg:h-[calc(100vh-61px)] border-b lg:border-b-0 lg:border-l border-slate-800/80 bg-[#05070c] flex flex-col order-last lg:order-none">
+        <section class="lg:col-span-9 relative h-full min-h-0 border-b lg:border-b-0 lg:border-l border-slate-800/80 bg-[#05070c] flex flex-col order-last lg:order-none">
             <div id="map-holder" class="w-full h-full relative cursor-grab active:cursor-grabbing">
                 <!-- SVG Canvas JS ile buraya eklenecek -->
+            </div>
+
+            <div class="absolute bottom-4 right-4 z-20 flex flex-col items-stretch gap-2">
+                <button onclick="window.resetZoom()" class="px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-compress text-cyan-400"></i>
+                    <span>Haritayı Sıfırla</span>
+                </button>
+                <button onclick="window.toggleProjection()" class="px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-globe text-accent"></i>
+                    <span id="proj-label">Düz Projeksiyon</span>
+                </button>
             </div>
 
             <div class="absolute bottom-4 left-4 z-20 bg-slate-950/80 backdrop-blur-md p-3 rounded-xl border border-slate-800 text-xs space-y-1.5 text-slate-400 font-mono">
