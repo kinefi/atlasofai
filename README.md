@@ -27,25 +27,25 @@ Amaç, yapay zekâ'nın "saf bir dijital araç" değil; doğa, iş gücü ve co�
 - HTML5
 - Tailwind CSS
 - D3.js ve TopoJSON
-- Harita (`map.js`) ve arayüz (`ui.js`) için ES modülleri
+- Harita (`map.js`), arayüz (`ui.js`) ve ortam sesi (`audio.js`) için ES modülleri
 - GitHub Pages için statik yayın
 
 ## Harici Kütüphaneler ve Veriler
 
-Uygulama bu kütüphaneleri CDN üzerinden yükler; haritanın ve yazı tiplerinin görünmesi için internet bağlantısı gerekir.
+Uygulama harita kütüphanelerini CDN üzerinden yükler; harita için internet bağlantısı gerekir. Yazı tipleri işletim sisteminin yerleşik serif ve monospace fontlarını kullanır.
 
 - [Tailwind CSS Play CDN](https://tailwindcss.com/docs/installation/play-cdn)
 - [D3.js](https://d3js.org/) v7
 - [TopoJSON Client](https://github.com/topojson/topojson-client) v3
 - [World Atlas](https://github.com/topojson/world-atlas) ülke sınırları
 - [Font Awesome](https://fontawesome.com/) 6.4
-- [Inter](https://fonts.google.com/specimen/Inter) ve [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) yazı tipleri
 
 ## Kullanım
 
-- Harita katmanlarını filtrelemek için kategori düğmelerini kullanın.
-- Aşama listesinden bir düğüm seçin veya listede kaydırarak haritayı ve bilgi panelini güncelleyin.
+- Harita üzerindeki katman düğmelerini kullanarak aşamaları filtreleyin.
+- Aşama listesinden bir düğüm seçin veya listede kaydırarak haritayı ve bilgi panelini güncelleyin; kaydırma haritayı ilgili konuma odaklar.
 - Önceki/sonraki düğmeleriyle ilerleyin ya da slayt gösterisini başlatın; otomatik geçiş aralığı 4 saniyedir.
+- İsteğe bağlı tarayıcı sentezli sesi düğmeye tıklayarak açın; aşama değiştikçe ses profili de değişir. Ses için tarayıcının Web Audio desteği gerekir. Tarayıcı sesi başlatmazsa düğmenin yanında hata bilgisi gösterilir.
 - Küre görünümünde haritayı sürükleyerek döndürün. Düz haritada sürükleme ve yakınlaştırma kullanılabilir.
 - Bilgi panelindeki görsele tıklayarak büyütün; ilgili konu için Vikipedi bağlantısını açın.
 
@@ -73,6 +73,7 @@ atlasofai/
 │   │   ├── nodes.json
 │   │   └── sources.json
 │   └── js/
+│       ├── audio.js
 │       ├── map.js
 │       └── ui.js
 ├── LICENSE
@@ -86,6 +87,12 @@ atlasofai/
 Haritadaki aşama kaynakları [assets/data/sources.json](assets/data/sources.json) dosyasında tutulur; her düğüm bunlara `sourceIds` ile bağlanır. Kaynakların aşamaya özgü atıfları bilgi panelinde gösterilir. Filistin'deki yüz tanıma ve Gazze'deki hedef belirleme aşamaları, kendi rapor ve haber kaynaklarına bağlanır; haberlerde aktarılan iddialar ile resmî yanıtlar açıklama metninde birbirinden ayrılır.
 
 Yeni bir aşama eklerken `nodes.json` içinde benzersiz bir `id`, harita koordinatı, `nextNodeIds` ve `sourceIds` tanımlayın; `sources.json` içine de kaynak künyesini ekleyin. `nextNodeIds` birden fazla bağlantıya izin verir; böylece harita paralel veri, donanım ve kullanım akışlarını gösterebilir. Aşamalar listedeki sıralarına göre numaralandırılır.
+
+Katman filtreleri haritanın üst kısmından yönetilir; aşama listesini kaydırmak seçili aşamayı ve harita odağını günceller. Küre görünümünde akışlar jeodezik çizilir. Harita düğümleri odaklanabilir; araç ipuçları aşama bilgisini ve varsa mikro grafiği gösterir. İsteğe bağlı ses Web Audio API ile tarayıcıda sentezlenir, harici ses dosyası kullanmaz ve ses profili aşama değiştikçe güncellenir.
+
+Su ayak izi, veri merkezleri ile model eğitimi arasında ayrı bir aşamadır. Grafikteki 2027 küresel su çekimi tahmini Li ve diğerlerinin çalışmasına dayanır; haritadaki düğüm şematiktir ve değerler tek bir veri merkezine ait değildir. Çalışmadaki su çekimi tahmini, GPT-3 eğitimi için verilen doğrudan su tüketimi tahmininden ayrı bir ölçüttür.
+
+Yeni bir aşamada ses profilini `soundProfile` alanıyla seçin (`mining`, `refining`, `chip-design`, `fabrication`, `data`, `annotation`, `data-center`, `water`, `training`, `use`, `surveillance`, `military` veya `e-waste`). Kaynaklı sayısal gösterimler düğümlere `chart` alanıyla eklenir ve dayandıkları kaynak `chart.sourceIds` içinde belirtilir.
 
 ## Kaynakça
 

@@ -37,8 +37,75 @@ export function createMap(nodes, onSelect) {
         .attr('width', width)
         .attr('height', height)
         .attr('class', 'w-full h-full');
+    const tooltip = document.createElement('div');
+    tooltip.id = 'map-node-tooltip';
+    tooltip.className = 'map-tooltip';
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.hidden = true;
+    container.append(tooltip);
     const g = svg.append('g');
     let zoom;
+
+    function positionTooltip(event, target) {
+        const bounds = container.getBoundingClientRect();
+        const targetBounds = target.getBoundingClientRect();
+        const x = event?.clientX ? event.clientX - bounds.left : targetBounds.left - bounds.left + targetBounds.width / 2;
+        const y = event?.clientY ? event.clientY - bounds.top : targetBounds.top - bounds.top + targetBounds.height / 2;
+        const left = Math.max(8, Math.min(width - tooltip.offsetWidth - 8, x + 12));
+        const top = Math.max(8, Math.min(height - tooltip.offsetHeight - 8, y + 12));
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+    }
+
+    function showTooltip(node, location, event) {
+        tooltip.replaceChildren();
+        const title = document.createElement('strong');
+        title.className = 'block text-xs font-semibold text-slate-100';
+        title.textContent = node.title;
+        tooltip.append(title);
+
+        const locationLabel = document.createElement('span');
+        locationLabel.className = 'mt-0.5 block text-[9px] text-slate-400';
+        locationLabel.textContent = location.label;
+        tooltip.append(locationLabel);
+
+        if (node.chart) {
+            const chartTitle = document.createElement('span');
+            chartTitle.className = 'mt-2 block text-[9px] font-mono text-slate-300';
+            chartTitle.textContent = node.chart.title;
+            tooltip.append(chartTitle);
+            const chartDescription = document.createElement('span');
+            chartDescription.className = 'mt-1 block text-[9px] leading-relaxed text-slate-400';
+            chartDescription.textContent = node.chart.description;
+            tooltip.append(chartDescription);
+            const maxValue = Math.max(...node.chart.series.map((item) => item.value));
+            node.chart.series.forEach((item) => {
+                const row = document.createElement('div');
+                row.className = 'chart-row mt-2 text-[9px] text-slate-300';
+                const label = document.createElement('span');
+                label.textContent = item.label;
+                const value = document.createElement('span');
+                value.className = 'font-mono text-slate-200';
+                value.textContent = `${item.value} ${node.chart.unit}`;
+                const track = document.createElement('div');
+                track.className = 'chart-track';
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.width = `${(item.value / maxValue) * 100}%`;
+                track.append(bar);
+                row.append(label, value, track);
+                tooltip.append(row);
+            });
+        } else {
+            const impact = document.createElement('span');
+            impact.className = 'mt-2 block text-[9px] leading-relaxed text-slate-300';
+            impact.textContent = `${node.eco} · ${node.labor}`;
+            tooltip.append(impact);
+        }
+
+        tooltip.hidden = false;
+        positionTooltip(event, event.currentTarget);
+    }
 
     function drawFlowArcs() {
         const arcsGroup = g.append('g').attr('class', 'arcs-layer');
@@ -51,15 +118,30 @@ export function createMap(nodes, onSelect) {
                 const targetNode = nodesById.get(targetNodeId);
                 if (!targetNode) return;
 
-                const source = projection(normalizeCoords(sourceNode.coords));
-                const target = projection(normalizeCoords(targetNode.coords));
-                const dx = target[0] - source[0];
-                const dy = target[1] - source[1];
-                const distance = Math.max(1, Math.hypot(dx, dy));
-                const bend = Math.min(42, Math.max(12, distance * 0.08));
-                const direction = sourceNode.id % 2 === 0 ? 1 : -1;
-                const controlX = (source[0] + target[0]) / 2 - (dy / distance) * bend * direction;
-                const controlY = (source[1] + target[1]) / 2 + (dx / distance) * bend * direction;
+                let arcPath;
+                if (isGlobe) {
+                    const interpolate = d3.geoInterpolate(
+                        normalizeCoords(sourceNode.coords),
+                        normalizeCoords(targetNode.coords)
+                    );
+                    const steps = Math.max(24, Math.ceil(d3.geoDistance(
+                        normalizeCoords(sourceNode.coords),
+                        normalizeCoords(targetNode.coords)
+                    ) * 48));
+                    const coordinates = Array.from({ length: steps + 1 }, (_, step) => interpolate(step / steps));
+                    arcPath = path({ type: 'LineString', coordinates });
+                } else {
+                    const source = projection(normalizeCoords(sourceNode.coords));
+                    const target = projection(normalizeCoords(targetNode.coords));
+                    const dx = target[0] - source[0];
+                    const dy = target[1] - source[1];
+                    const distance = Math.max(1, Math.hypot(dx, dy));
+                    const bend = Math.min(42, Math.max(12, distance * 0.08));
+                    const direction = sourceNode.id % 2 === 0 ? 1 : -1;
+                    const controlX = (source[0] + target[0]) / 2 - (dy / distance) * bend * direction;
+                    const controlY = (source[1] + target[1]) / 2 + (dx / distance) * bend * direction;
+                    arcPath = `M${source[0]},${source[1]}Q${controlX},${controlY} ${target[0]},${target[1]}`;
+                }
                 const frontFacing = isPointVisible(sourceNode.coords) && isPointVisible(targetNode.coords);
 
                 arcsGroup.append('path')
@@ -68,7 +150,7 @@ export function createMap(nodes, onSelect) {
                     .attr('data-target-id', targetNode.id)
                     .attr('data-front-facing', String(frontFacing))
                     .style('display', frontFacing ? null : 'none')
-                    .attr('d', `M${source[0]},${source[1]}Q${controlX},${controlY} ${target[0]},${target[1]}`)
+                    .attr('d', arcPath)
                     .attr('stroke-width', 2);
             });
         });
@@ -95,8 +177,25 @@ export function createMap(nodes, onSelect) {
                     .attr('data-coords-key', location.coords.join(','))
                     .attr('data-front-facing', String(frontFacing))
                     .attr('class', 'map-node cursor-pointer')
+                    .attr('role', 'button')
+                    .attr('tabindex', 0)
+                    .attr('aria-label', `${node.title}, ${location.label}`)
+                    .attr('aria-describedby', 'map-node-tooltip')
                     .style('display', frontFacing ? null : 'none')
-                    .on('click', () => onSelect(index, location.coords, location.label));
+                    .on('click', () => onSelect(index, location.coords, location.label))
+                    .on('mouseenter', (event) => showTooltip(node, location, event))
+                    .on('mousemove', (event) => {
+                        if (!tooltip.hidden) positionTooltip(event, event.currentTarget);
+                    })
+                    .on('mouseleave', () => { tooltip.hidden = true; })
+                    .on('focus', (event) => showTooltip(node, location, event))
+                    .on('blur', () => { tooltip.hidden = true; })
+                    .on('keydown', (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            onSelect(index, location.coords, location.label);
+                        }
+                    });
 
                 nodeGroup.append('circle').attr('r', 12).attr('class', 'pulse-node node-halo');
                 nodeGroup.append('circle').attr('r', 6).attr('class', 'node-core');
@@ -135,7 +234,35 @@ export function createMap(nodes, onSelect) {
         });
     }
 
+    function focusNode(coords) {
+        if (!coords) return;
+        const duration = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 650;
+        if (isGlobe) {
+            const currentRotation = projection.rotate();
+            const targetRotation = [-coords[0], -coords[1], currentRotation[2]];
+            while (targetRotation[0] - currentRotation[0] > 180) targetRotation[0] -= 360;
+            while (targetRotation[0] - currentRotation[0] < -180) targetRotation[0] += 360;
+            const interpolate = d3.interpolateArray(currentRotation, targetRotation);
+            svg.transition()
+                .duration(duration)
+                .tween('globe-focus', () => (time) => {
+                    projection.rotate(interpolate(time));
+                    renderProjectionLayers();
+                });
+            return;
+        }
+
+        const [x, y] = projection(normalizeCoords(coords));
+        const scale = 2.4;
+        svg.transition()
+            .duration(duration)
+            .call(zoom.transform, d3.zoomIdentity
+                .translate(width / 2 - x * scale, height / 2 - y * scale)
+                .scale(scale));
+    }
+
     function renderProjectionLayers() {
+        tooltip.hidden = true;
         g.selectAll('.country, .sphere, .graticule').attr('d', path);
         g.selectAll('.arcs-layer, .nodes-layer, .atmosphere-ring').remove();
 
@@ -209,6 +336,7 @@ export function createMap(nodes, onSelect) {
             svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity);
         },
         setActiveNode,
+        focusNode,
         setVisibleNodeIds(ids) {
             visibleNodeIds = new Set(ids);
             applyVisibility();

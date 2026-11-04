@@ -46,5 +46,13 @@
     "title": "‘Lavender’: The AI machine directing Israel’s bombing spree in Gaza",
     "type": "Araştırmacı gazetecilik",
     "url": "https://www.972mag.com/lavender-ai-israeli-army-gaza/"
+  },
+  {
+    "id": "ren-ai-water-2023",
+    "author": "Pengfei Li, Jianyi Yang, Mohammad A. Islam ve Shaolei Ren",
+    "year": 2023,
+    "title": "Making AI Less Thirsty: Uncovering and Addressing the Secret Water Footprint of AI Models",
+    "type": "Araştırma makalesi",
+    "url": "https://arxiv.org/abs/2304.03271"
   }
 ]

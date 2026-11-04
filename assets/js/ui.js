@@ -1,4 +1,5 @@
 import { createMap } from './map.js';
+import { createAmbientSound } from './audio.js';
 
 let nodes = [];
 let sources = new Map();
@@ -8,6 +9,7 @@ let activeLayers = new Set();
 let filtersInitialized = false;
 let slideshowTimer = null;
 let storyObserver = null;
+const ambientSound = createAmbientSound();
 
 async function loadNodes() {
     const [nodesResponse, sourcesResponse] = await Promise.all([
@@ -26,7 +28,19 @@ async function loadNodes() {
 
     sources = new Map(sourceData.map((source) => [source.id, source]));
     for (const node of nodeData) {
-        for (const sourceId of node.sourceIds || []) {
+        const sourceIds = [...(node.sourceIds || []), ...(node.chart?.sourceIds || [])];
+        if (node.chart && (!node.chart.title
+            || !node.chart.description
+            || !node.chart.unit
+            || !Array.isArray(node.chart.series)
+            || node.chart.series.length === 0
+            || node.chart.series.some((item) => !item
+                || typeof item.label !== 'string'
+                || !Number.isFinite(item.value)
+                || item.value <= 0))) {
+            throw new Error(`Aşama grafiği geçersiz: ${node.id}`);
+        }
+        for (const sourceId of sourceIds) {
             if (!sources.has(sourceId)) {
                 throw new Error(`Aşama kaynağı bulunamadı: ${sourceId}`);
             }
@@ -36,11 +50,22 @@ async function loadNodes() {
 }
 
 function previousChapter() {
-    if (nodes.length) selectChapter((activeIndex - 1 + nodes.length) % nodes.length);
+    navigateVisibleChapter(-1);
 }
 
 function nextChapter() {
-    if (nodes.length) selectChapter((activeIndex + 1) % nodes.length);
+    navigateVisibleChapter(1);
+}
+
+function navigateVisibleChapter(direction) {
+    if (!nodes.length) return;
+    for (let offset = 1; offset <= nodes.length; offset += 1) {
+        const index = (activeIndex + direction * offset + nodes.length) % nodes.length;
+        if (activeLayers.has(nodes[index].layer || 'Diğer')) {
+            selectChapter(index);
+            return;
+        }
+    }
 }
 
 function toggleSlideshow() {
@@ -66,9 +91,9 @@ function toggleSlideshow() {
 function applyFilters() {
     const visibleNodes = nodes.filter((node) => activeLayers.has(node.layer || 'Diğer'));
     const visibleIds = visibleNodes.map((node) => node.id);
-    mapController.setVisibleNodeIds(visibleIds);
+    mapController?.setVisibleNodeIds(visibleIds);
 
-    document.querySelectorAll('.category-filter').forEach((button) => {
+    document.querySelectorAll('.layer-filter').forEach((button) => {
         const active = activeLayers.has(button.dataset.layer);
         button.classList.toggle('is-active', active);
         button.setAttribute('aria-pressed', String(active));
@@ -79,27 +104,46 @@ function applyFilters() {
         button.hidden = !node || !activeLayers.has(node.layer || 'Diğer');
     });
 
-    if (visibleNodes.length && !activeLayers.has(nodes[activeIndex].layer || 'Diğer')) {
+    if (visibleNodes.length && nodes[activeIndex] && !activeLayers.has(nodes[activeIndex].layer || 'Diğer')) {
         selectChapter(nodes.indexOf(visibleNodes[0]));
     }
 }
 
-function renderChapterButtons() {
-    const chapterBar = document.getElementById('chapter-bar');
+function renderLayerFilters() {
+    const filterBar = document.getElementById('layer-filter-bar');
     const layers = [...new Set(nodes.map((node) => node.layer || 'Diğer'))];
     if (!filtersInitialized) {
         activeLayers = new Set(layers);
         filtersInitialized = true;
     }
 
+    filterBar.replaceChildren();
+    layers.forEach((layer) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `layer-filter ${activeLayers.has(layer) ? 'is-active' : ''}`;
+        button.dataset.layer = layer;
+        button.dataset.layerFilter = '';
+        button.textContent = layer;
+        button.title = `${layer} katmanını göster veya gizle`;
+        button.setAttribute('aria-label', `${layer} katmanını göster veya gizle`);
+        button.setAttribute('aria-pressed', String(activeLayers.has(layer)));
+        button.addEventListener('click', () => {
+            if (activeLayers.has(layer)) activeLayers.delete(layer);
+            else activeLayers.add(layer);
+            applyFilters();
+        });
+        filterBar.append(button);
+    });
+}
+
+function renderChapterButtons() {
+    const chapterBar = document.getElementById('chapter-bar');
     chapterBar.replaceChildren();
     nodes.forEach((node, index) => {
-        const row = document.createElement('div');
-        row.className = 'flex min-w-0 items-center gap-2';
-
         const chapterButton = document.createElement('button');
         chapterButton.type = 'button';
-        chapterButton.className = 'chap-btn min-w-0 flex-1 px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 text-left';
+        chapterButton.className = 'chap-btn min-w-0 w-full px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 text-left';
         chapterButton.dataset.index = index;
         chapterButton.setAttribute('aria-current', 'false');
 
@@ -117,24 +161,7 @@ function renderChapterButtons() {
 
         chapterButton.append(number, label);
         chapterButton.addEventListener('click', () => selectChapter(Number(chapterButton.dataset.index)));
-
-        const layer = node.layer || 'Diğer';
-        const filterButton = document.createElement('button');
-        filterButton.type = 'button';
-        filterButton.className = `category-filter shrink-0 ${activeLayers.has(layer) ? 'is-active' : ''}`;
-        filterButton.dataset.layer = layer;
-        filterButton.textContent = layer;
-        filterButton.title = `${layer} katmanını filtrele`;
-        filterButton.setAttribute('aria-label', `${layer} katmanını göster veya gizle`);
-        filterButton.setAttribute('aria-pressed', String(activeLayers.has(layer)));
-        filterButton.addEventListener('click', () => {
-            if (activeLayers.has(layer)) activeLayers.delete(layer);
-            else activeLayers.add(layer);
-            applyFilters();
-        });
-
-        row.append(chapterButton, filterButton);
-        chapterBar.append(row);
+        chapterBar.append(chapterButton);
     });
 
     if (storyObserver) storyObserver.disconnect();
@@ -142,23 +169,34 @@ function renderChapterButtons() {
         const visible = entries
             .filter((entry) => entry.isIntersecting && !entry.target.hidden)
             .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) selectChapter(Number(visible.target.dataset.index));
+        if (visible) {
+            const index = Number(visible.target.dataset.index);
+            if (index !== activeIndex) {
+                selectChapter(index, undefined, undefined, { fromScroll: true, focusMap: true });
+            }
+        }
     }, { root: chapterBar, threshold: [0.65, 0.85] });
     chapterBar.querySelectorAll('.chap-btn').forEach((button) => storyObserver.observe(button));
 }
 
-function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
+function selectChapter(index, coords = nodes[index]?.coords, locationLabel, options = {}) {
     const node = nodes[index];
     if (!node) return;
     coords = coords || node.coords;
     activeIndex = index;
+    ambientSound.setProfile(node.soundProfile);
 
     document.querySelectorAll('.chap-btn').forEach((button) => {
         const selected = Number(button.dataset.index) === index;
         button.classList.toggle('is-current', selected);
         button.setAttribute('aria-current', String(selected));
+        if (selected && !options.fromScroll) {
+            const behavior = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+            button.scrollIntoView({ block: 'nearest', behavior });
+        }
     });
     mapController?.setActiveNode(node.id, coords);
+    if (options.focusMap) mapController?.focusNode(coords);
 
     document.getElementById('detail-img').src = node.img;
     document.getElementById('detail-img').alt = node.imageAlt || `${node.mapLabel || node.name} konum görseli`;
@@ -180,7 +218,8 @@ function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
     const sourceList = document.getElementById('detail-sources-list');
     const sourceSection = document.getElementById('detail-sources');
     sourceList.replaceChildren();
-    (node.sourceIds || []).forEach((sourceId) => {
+    const sourceIds = [...new Set([...(node.sourceIds || []), ...(node.chart?.sourceIds || [])])];
+    sourceIds.forEach((sourceId) => {
         const source = sources.get(sourceId);
         const item = document.createElement('li');
         const link = document.createElement('a');
@@ -222,9 +261,70 @@ function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
         featuredArticleLink.removeAttribute('title');
         featuredArticleLink.removeAttribute('aria-label');
     }
+    renderChart(node.chart);
     document.getElementById('metric-eco').innerText = node.eco;
     document.getElementById('metric-labor').innerText = node.labor;
     document.getElementById('detail-insight').innerText = node.quote;
+}
+
+function renderChart(chart) {
+    const section = document.getElementById('detail-chart');
+    const seriesContainer = document.getElementById('detail-chart-series');
+    seriesContainer.replaceChildren();
+    section.hidden = !chart;
+    if (!chart) return;
+
+    document.getElementById('detail-chart-title').textContent = chart.title;
+    document.getElementById('detail-chart-description').textContent = chart.description;
+    const maxValue = Math.max(...chart.series.map((item) => item.value));
+    seriesContainer.setAttribute('aria-label', `${chart.title}. ${chart.description}. ${chart.series
+        .map((item) => `${item.label}: ${item.value} ${chart.unit}`)
+        .join('; ')}`);
+
+    chart.series.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'chart-row text-[9px] text-slate-300';
+        const label = document.createElement('span');
+        label.textContent = item.label;
+        const value = document.createElement('span');
+        value.className = 'font-mono text-slate-200';
+        value.textContent = `${item.value} ${chart.unit}`;
+        const track = document.createElement('div');
+        track.className = 'chart-track';
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.width = `${Math.max(0, Math.min(100, (item.value / maxValue) * 100))}%`;
+        track.append(bar);
+        row.append(label, value, track);
+        seriesContainer.append(row);
+    });
+}
+
+async function toggleAmbientAudio() {
+    const button = document.getElementById('ambient-audio-toggle');
+    const icon = document.getElementById('ambient-audio-icon');
+    const status = document.getElementById('ambient-audio-status');
+    button.disabled = true;
+    try {
+        const isPlaying = await ambientSound.toggle();
+        button.setAttribute('aria-pressed', String(isPlaying));
+        button.querySelector('span').textContent = isPlaying ? 'Aşama sesini kapat' : 'Aşama sesini aç';
+        button.title = isPlaying ? 'Tarayıcıda üretilen aşama sesini kapat' : 'Tarayıcıda üretilen aşama sesini aç';
+        icon.className = `fa-solid ${isPlaying ? 'fa-volume-xmark' : 'fa-volume-high'} text-cyberblue`;
+        status.textContent = isPlaying ? 'Aşama ortam sesi açık.' : 'Aşama ortam sesi kapalı.';
+        status.hidden = true;
+        status.classList.add('hidden');
+    } catch (error) {
+        console.error(error);
+        status.textContent = `Ortam sesi başlatılamadı: ${error.message}`;
+        status.hidden = false;
+        status.classList.remove('hidden');
+        button.querySelector('span').textContent = 'Sesi yeniden dene';
+        button.title = error.message;
+        icon.className = 'fa-solid fa-triangle-exclamation text-rose-400';
+    } finally {
+        button.disabled = !ambientSound.supported;
+    }
 }
 
 function openImageLightbox() {
@@ -264,8 +364,13 @@ async function initialize() {
     try {
         await loadNodes();
         renderChapterButtons();
+        renderLayerFilters();
         mapController = createMap(nodes, selectChapter);
         selectChapter(0);
+        const audioButton = document.getElementById('ambient-audio-toggle');
+        audioButton.disabled = !ambientSound.supported;
+        if (!ambientSound.supported) audioButton.title = 'Bu tarayıcı ortam sesini desteklemiyor.';
+        audioButton.addEventListener('click', toggleAmbientAudio);
         document.getElementById('detail-panel-toggle').addEventListener('click', toggleDetailPanel);
         document.getElementById('image-lightbox').addEventListener('click', (event) => {
             if (event.target === event.currentTarget) closeImageLightbox();

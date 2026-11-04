@@ -1,6 +1,7 @@
 [
   {
     "id": 0,
+    "soundProfile": "mining",
     "name": "Salar de Atacama & Kolwezi",
     "mapLabel": "Atacama lityum madeni",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/Salar_de_Atacama",
@@ -38,6 +39,7 @@
   },
   {
     "id": 1,
+    "soundProfile": "refining",
     "name": "Baotou Rare Earth Basin",
     "mapLabel": "Baotou Nadir Toprak Havzası",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/Nadir_toprak_elementleri",
@@ -69,6 +71,7 @@
   },
   {
     "id": 2,
+    "soundProfile": "chip-design",
     "name": "Silicon Valley AI Design",
     "mapLabel": "Silikon Vadisi Çip Tasarımı",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/Silikon_Vadisi",
@@ -97,6 +100,7 @@
   },
   {
     "id": 3,
+    "soundProfile": "fabrication",
     "name": "TSMC Semiconductor Fab",
     "mapLabel": "TSMC Çip Fabrikası",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/TSMC",
@@ -128,6 +132,7 @@
   },
   {
     "id": 9,
+    "soundProfile": "data",
     "name": "ImageNet Dataset Creation",
     "mapLabel": "ImageNet veri kümesi",
     "wikipediaUrl": "https://en.wikipedia.org/wiki/ImageNet",
@@ -157,6 +162,7 @@
   },
   {
     "id": 4,
+    "soundProfile": "annotation",
     "name": "Nairobi & Manila",
     "mapLabel": "Nairobi veri işçiliği",
     "wikipediaUrl": "https://tr.wikipedia.org/w/index.php?search=Veri+etiketleme",
@@ -188,6 +194,7 @@
   },
   {
     "id": 5,
+    "soundProfile": "data-center",
     "name": "Data Center Alley (AWS / Azure)",
     "mapLabel": "Kuzey Virginia Veri Merkezleri",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/Veri_merkezi",
@@ -195,7 +202,7 @@
     "layer": "Altyapı ve Hesaplama",
     "location": "Northern Virginia, ABD",
     "coords": [-77.48, 39.04],
-    "nextNodeIds": [6],
+    "nextNodeIds": [12],
     "category": "Bulut Hesaplama",
     "title": "Veri Merkezleri ve Enerji",
     "desc": "Dünyadaki internet trafiğinin ve yapay zekâ model eğitimlerinin çok büyük kısmı burada geçer. Yüksek performanslı GPU kümeleri, büyük su ve elektrik tüketimiyle çalışır.",
@@ -215,7 +222,36 @@
     "img": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
   },
   {
+    "id": 12,
+    "soundProfile": "water",
+    "name": "AI Water Footprint",
+    "mapLabel": "Veri merkezi su ayak izi",
+    "sourceIds": ["ren-ai-water-2023"],
+    "layer": "Altyapı ve Hesaplama",
+    "location": "Küresel veri merkezleri (şematik harita düğümü)",
+    "coords": [-76.9, 38.5],
+    "nextNodeIds": [6],
+    "category": "Su Tüketimi ve Soğutma",
+    "title": "Yapay Zekânın Su Ayak İzi",
+    "desc": "Veri merkezlerinin soğutulması ve elektriğin üretimi yapay zekânın su ayak izine katkıda bulunur. Haritadaki konum bu küresel aşama için şematiktir; aşağıdaki tahmin tek bir tesise veya bu konuma ait ölçüm değildir. Kaynak çalışma, veri merkezleri için su çekimini raporlar; su çekimi ile tüketimi aynı ölçüt değildir.",
+    "eco": "Soğutma ve enerji üretimi için yüksek su çekimi",
+    "labor": "Su altyapısı, soğutma sistemleri ve tesis operasyonları",
+    "quote": "Dijital hesaplamanın görünmeyen girdilerinden biri sudur; her tahminin kapsamı ve ölçütü ayrıca belirtilmelidir.",
+    "chart": {
+      "title": "2027 küresel yapay zekâ su çekimi tahmini",
+      "description": "Küresel ölçekte 4,2–6,6 milyar m³ su çekimi tahmini. Bu, haritadaki noktaya veya tek bir veri merkezine ait değildir. Aynı çalışma GPT-3 eğitimi için yaklaşık 700.000 litre doğrudan su tüketimi tahmin eder.",
+      "unit": "milyar m³",
+      "sourceIds": ["ren-ai-water-2023"],
+      "series": [
+        { "label": "Alt tahmin", "value": 4.2 },
+        { "label": "Üst tahmin", "value": 6.6 }
+      ]
+    },
+    "img": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+  },
+  {
     "id": 6,
+    "soundProfile": "training",
     "name": "Singapore AI Training Cluster",
     "mapLabel": "Singapur Yapay Zekâ Kümesi",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/Yapay_zeka",
@@ -244,6 +280,7 @@
   },
   {
     "id": 7,
+    "soundProfile": "use",
     "name": "Tokyo & Seoul Device Layer",
     "mapLabel": "Tokyo cihaz katmanı",
     "wikipediaUrl": "https://tr.wikipedia.org/wiki/T%C3%BCketici_elektroni%C4%9Fi",
@@ -283,6 +320,7 @@
   },
   {
     "id": 10,
+    "soundProfile": "surveillance",
     "name": "Palestinian Facial Recognition Systems",
     "mapLabel": "Yüz tanıma — Filistin",
     "sourceIds": ["amnesty-automated-apartheid-2023"],
@@ -316,6 +354,7 @@
   },
   {
     "id": 11,
+    "soundProfile": "military",
     "name": "AI-Assisted Target Selection in Gaza",
     "mapLabel": "Gazze'de hedef belirleme iddiaları",
     "sourceIds": ["guardian-lavender-2024", "972-lavender-2024"],
@@ -346,6 +385,7 @@
   },
   {
     "id": 8,
+    "soundProfile": "e-waste",
     "name": "Agbogbloshie & Guiyu",
     "mapLabel": "Agbogbloshie e-atık sahası",
     "wikipediaUrl": "https://tr.wikipedia.org/w/index.php?search=Agbogbloshie",
