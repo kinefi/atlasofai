@@ -1,0 +1,59 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #07090e;
+    color: #e2e8f0;
+    overflow-x: hidden;
+}
+
+.country {
+    fill: #161e2e;
+    stroke: #1f293d;
+    stroke-width: 0.6px;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.country:hover {
+    fill: #222f46;
+    stroke: #00f0ff;
+}
+
+.sphere {
+    fill: #090d16;
+    stroke: #1e293b;
+    stroke-width: 1px;
+}
+
+.graticule {
+    fill: none;
+    stroke: #1e293b;
+    stroke-width: 0.4px;
+    stroke-dasharray: 2,4;
+    opacity: 0.6;
+}
+
+.arc-line {
+    fill: none;
+    stroke: url(#arc-gradient);
+    stroke-dasharray: 6,4;
+    animation: dash 30s linear infinite;
+}
+
+@keyframes dash {
+    to { stroke-dashoffset: -1000; }
+}
+
+.pulse-node {
+    transform-origin: center;
+    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    50% { transform: scale(1.8); opacity: 0.2; }
+    100% { transform: scale(0.8); opacity: 0.8; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #07090e; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
