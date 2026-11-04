@@ -71,9 +71,3 @@ Bu çalışma, aşağıdaki akademik ve sanatsal araştırmalara dayanan eğitim
 ## Lisans
 
 Bu proje [Apache 2.0 lisansıyla](./LICENSE) açık kaynak olarak yayımlanmıştır; katkı, geri bildirim ve geliştirmeler için GitHub repomuzu ziyaret edebilirsiniz.
-
-## Geliştirme Sırası
-
-1. Kategori filtresi eklemek: ham madde, üretim, insan emeği, veri merkezi ve e-atık kategorilerini ayrı ayrı göstermek.
-2. Scrollytelling akışı kurmak: kullanıcı aşağı kaydırdıkça ilgili düğüme odaklanması ve haritanın o bölüme zoomlaması.
-3. Akış çizgileri ve tooltip geliştirmek: bağlantıları daha net göstermek, animasyon eklemek ve her düğüm için daha zengin mini veri kartları hazırlamak.
