@@ -52,11 +52,11 @@
                 <i class="fa-brands fa-github text-cyan-400"></i>
                 <span>Açık kaynak</span>
             </a>
-            <button onclick="resetZoom()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+            <button onclick="window.resetZoom()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-compress text-cyan-400"></i>
                 <span class="hidden md:inline">Haritayı Sıfırla</span>
             </button>
-            <button onclick="toggleProjection()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+            <button onclick="window.toggleProjection()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-globe text-accent"></i>
                 <span id="proj-label">Düz Projeksiyon</span>
             </button>
@@ -111,6 +111,9 @@
                         <p id="detail-desc" class="text-[11px] md:text-xs text-slate-300 leading-relaxed">
                             Açıklama yükleniyor...
                         </p>
+                        <a id="detail-wikipedia" class="inline-flex items-center gap-1.5 mt-2 text-[10px] font-mono text-cyan-400 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
+                            Vikipedi'de oku <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        </a>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
@@ -172,6 +175,6 @@
         <img id="lightbox-img" src="" alt="">
     </dialog>
 
-    <script src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/ui.js"></script>
 </body>
 </html>

@@ -27,9 +27,27 @@ Amaç, yapay zekâ'nın "saf bir dijital araç" değil; doğa, iş gücü ve co�
 - HTML5
 - Tailwind CSS
 - D3.js ve TopoJSON
+- Harita (`map.js`) ve arayüz (`ui.js`) için ES modülleri
 - GitHub Pages için statik yayın
 
----
+## Harici Kütüphaneler ve Veriler
+
+Uygulama bu kütüphaneleri CDN üzerinden yükler; haritanın ve yazı tiplerinin görünmesi için internet bağlantısı gerekir.
+
+- [Tailwind CSS Play CDN](https://tailwindcss.com/docs/installation/play-cdn)
+- [D3.js](https://d3js.org/) v7
+- [TopoJSON Client](https://github.com/topojson/topojson-client) v3
+- [World Atlas](https://github.com/topojson/world-atlas) ülke sınırları
+- [Font Awesome](https://fontawesome.com/) 6.4
+- [Inter](https://fonts.google.com/specimen/Inter) ve [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) yazı tipleri
+
+## Kullanım
+
+- Harita katmanlarını filtrelemek için kategori düğmelerini kullanın.
+- Aşama listesinden bir düğüm seçin veya listede kaydırarak haritayı ve bilgi panelini güncelleyin.
+- Önceki/sonraki düğmeleriyle ilerleyin ya da slayt gösterisini başlatın; otomatik geçiş aralığı 4 saniyedir.
+- Küre görünümünde haritayı sürükleyerek döndürün. Düz haritada sürükleme ve yakınlaştırma kullanılabilir.
+- Bilgi panelindeki görsele tıklayarak büyütün; ilgili konu için Vikipedi bağlantısını açın.
 
 ## GitHub Pages ile Yayınlama
 
@@ -54,7 +72,8 @@ atlasofai/
 │   ├── data/
 │   │   └── nodes.json
 │   └── js/
-│       └── app.js
+│       ├── map.js
+│       └── ui.js
 ├── LICENSE
 └── README.md
 ```
