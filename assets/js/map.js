@@ -182,7 +182,7 @@ export function createMap(nodes, onSelect) {
         .attr('height', height * 4)
         .attr('x', -width)
         .attr('y', -height)
-        .attr('fill', '#070a12');
+        .attr('fill', '#0b1117');
     g.append('path').datum(d3.geoGraticule()).attr('class', 'graticule').attr('d', path);
 
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')

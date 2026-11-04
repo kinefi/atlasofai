@@ -187,7 +187,7 @@ function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
         link.href = source.url;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        link.className = 'break-words text-cyan-400 hover:text-cyan-300';
+        link.className = 'break-words text-cyberblue hover:text-cyberblue';
         link.textContent = `${source.author} (${source.year}) · ${source.type} — ${source.title}`;
         item.append(link);
         sourceList.append(item);
