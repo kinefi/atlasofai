@@ -18,6 +18,16 @@
     "eco": "Su yetersizliği, tuz gölleri ve ağır metal kirliliği",
     "labor": "Ağır iş koşulları ve tehlikeli madencilik emekçiliği",
     "quote": "Yapay zekânın başlangıç noktası algoritmalar değil, Dünya'nın alt katmanlarında çıkarılan madenlerdir.",
+    "relatedArticles": [
+      {
+        "title": "Yapay Zekâ Ekonomisi, Hammadde Krizleri ve Finansal Balonlar Kıskacında",
+        "url": "https://www.iyimserirade.org/yapay-zeka-ekonomisi-hammadde-krizleri-ve-finansal-balonlar-kiskacinda/"
+      },
+      {
+        "title": "Kölelik, Emek ve Hesaplamanın Tarihi",
+        "url": "https://www.iyimserirade.org/kolelik-emek-ve-hesaplamanin-tarihi/"
+      }
+    ],
     "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Salar_de_Atacama%2C_Chile_ESA386674.jpg/960px-Salar_de_Atacama%2C_Chile_ESA386674.jpg",
     "imageCredit": {
       "label": "ESA / Copernicus Sentinel-2A",
@@ -42,7 +52,20 @@
     "eco": "Kimyasal atık, su kirliliği ve arazi bozulması",
     "labor": "Yöntemli üretim, düşük ücretli kimyasal iş gücü",
     "quote": "Bir modelin görünmeyen ölçüsü, ekrandaki metin değil, rafinasyon tesislerinin kimyasal yüküdür.",
-    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+    "relatedArticles": [
+      {
+        "title": "Yapay Zekâ ve Ekolojik Yıkım",
+        "url": "https://www.iyimserirade.org/yapay-zeka-ve-ekolojik-yikim/"
+      }
+    ],
+    "imageAlt": "Bayan Obo nadir toprak madeni, NASA uydu görüntüsü.",
+    "img": "https://upload.wikimedia.org/wikipedia/commons/b/be/Baiyunebo_ast_2006181.jpg",
+    "imageCredit": {
+      "label": "NASA Earth Observatory",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Baiyunebo_ast_2006181.jpg",
+      "licenseLabel": "Public domain",
+      "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+    }
   },
   {
     "id": 2,
@@ -60,7 +83,17 @@
     "eco": "Yüksek enerji tüketimi ve tasarım ağında yoğun veri kullanımı",
     "labor": "Yüksek vasıflı mühendislik, araştırma ve ürün tasarımı",
     "quote": "Bilgisayarın özü, bir çipin mimarisinde değil, insan zekâsının uzmanlık biçiminde saklıdır.",
-    "img": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
+    "relatedArticles": [
+      {
+        "title": "Kapitalist Zekâ mı? (I. Kısım)",
+        "url": "https://www.iyimserirade.org/kapitalist-zeka-mi-i/"
+      },
+      {
+        "title": "Yapay Zekâ: İyimser Olmak için Erken",
+        "url": "https://www.iyimserirade.org/yapay-zeka-iyimser-olmak-icin-erken/"
+      }
+    ],
+    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
   },
   {
     "id": 3,
@@ -78,7 +111,20 @@
     "eco": "Günlük yüzbinlerce ton su ve yüksek karbon ayak izi",
     "labor": "Temiz oda mühendisliği, vardiyalı üretim ve teknik bakım",
     "quote": "En gelişmiş zekâ, gezegenin en hassas ve enerji yoğun üretim tesislerinde şekillenir.",
-    "img": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80"
+    "imageAlt": "Yarı iletken üretiminde kullanılan silikon gofret.",
+    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Wafer_20110212.jpg/960px-Wafer_20110212.jpg",
+    "imageCredit": {
+      "label": "Sangitiana Fararano",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wafer_20110212.jpg",
+      "licenseLabel": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+    },
+    "relatedArticles": [
+      {
+        "title": "Yapay Zekâ ve Marksist Üretici Kuvvetler Anlayışı",
+        "url": "https://www.iyimserirade.org/yapay-zeka-ve-marksist-uretici-kuvvetler-anlayisi/"
+      }
+    ]
   },
   {
     "id": 9,
@@ -97,6 +143,16 @@
     "labor": "Veri seçimi, etiketleme ve kalite kontrol süreçleri.",
     "quote": "Modelin öğrendiği dünya, seçilip etiketlenmiş verilerin sınırlarını taşır.",
     "imageAlt": "Veri toplama ve sınıflandırmayı temsil eden görsel.",
+    "relatedArticles": [
+      {
+        "title": "Dijital emek ve dijitalleşme",
+        "url": "https://www.iyimserirade.org/dijital-emek-ve-dijitallesme/"
+      },
+      {
+        "title": "Yapay Zekâ Geliştirmek için Kullanılan Veriler Nereden Geliyor?",
+        "url": "https://www.iyimserirade.org/yapay-zeka-gelistirmek-icin-kullanilan-veriler-nereden-geliyor/"
+      }
+    ],
     "img": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
   },
   {
@@ -118,6 +174,16 @@
     "eco": "Düşük fiziksel iz, yüksek psikolojik yıpranma",
     "labor": "Düşük ücretli onaylama işçiliği ve travmatik içerik kategorileştirme",
     "quote": "Makine öğrenimi olarak adlandırdığımız şey, görünmeyen insan emeğinin anonimleştirilmesidir.",
+    "relatedArticles": [
+      {
+        "title": "Binlerce “aşırı çalıştırılan, düşük ücretli” insan Google’nin yapay zekâsını akıllı gözükmesi için nasıl eğitiyor?",
+        "url": "https://www.iyimserirade.org/binlerce-asiri-calistirilan-dusuk-ucretli-insan-akilli-gozukmesi-icin-googlenin-yapay-zekasini-nasil-egitiyor/"
+      },
+      {
+        "title": "Yapay Zekânın Emeği",
+        "url": "https://www.iyimserirade.org/yapay-zekanin-emegi/"
+      }
+    ],
     "img": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80"
   },
   {
@@ -136,6 +202,16 @@
     "eco": "Devasa ısı salınımı, soğutma suyu ve karbon yükü",
     "labor": "7/24 altyapı, güvenlik ve operasyon yönetimi",
     "quote": "Yapay zekâ modeli eğitmek, bir şehir gibi enerji ve su tüketir.",
+    "relatedArticles": [
+      {
+        "title": "Yapay Zekâ Yatırımlarının İnsanlık ve Doğa için Maliyeti Artıyor",
+        "url": "https://www.iyimserirade.org/yapay-zeka-yatirimlarinin-insanlik-ve-doga-icin-maliyeti-artiyor/"
+      },
+      {
+        "title": "Yapay Zekâ: Kapitalizmin Kurtuluşu mu Yoksa Başka Bir Balon mu?",
+        "url": "https://www.iyimserirade.org/yapay-zeka-kapitalizmin-kurtulusu-mu-yoksa-baska-bir-balon-mu/"
+      }
+    ],
     "img": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
   },
   {
@@ -154,6 +230,16 @@
     "eco": "Yüksek enerji tüketimi ve su soğutma gereksinimi",
     "labor": "Mühendislik operasyonları, veri bilimciler ve altyapı ekipleri",
     "quote": "Bir modelin konuşma gücü, gerçekte çok sayıda ağın, enerji akışının ve operasyonel ısının sonucu olur.",
+    "relatedArticles": [
+      {
+        "title": "Yapay Zekâ ve Anti-Zekâ Mimarisi",
+        "url": "https://www.iyimserirade.org/yapay-zeka-ve-anti-zeka-mimarisi/"
+      },
+      {
+        "title": "Yapay Zekânın Arkasında Çok Büyük Bir Gizli İşgücü Var",
+        "url": "https://www.iyimserirade.org/yapay-zekanin-arkasinda-cok-buyuk-bir-gizli-isgucu-var/"
+      }
+    ],
     "img": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80"
   },
   {
@@ -175,6 +261,24 @@
     "eco": "Hızlı teknoloji değişimi, tüketim döngüsü ve enerji kullanımı",
     "labor": "Üretim, montaj ve bakım iş gücü",
     "quote": "Yapay zekâ yalnızca sunucu odalarında değil; günlük hayatın en küçük ekranlarında da iş görür.",
+    "relatedArticles": [
+      {
+        "title": "Yapay Zekânın Otomasyon Tuzağı",
+        "url": "https://www.iyimserirade.org/yapay-zekanin-otomasyon-tuzagi/"
+      },
+      {
+        "title": "Yapay Zekâ İstihdamı Nasıl Dönüştürüyor?",
+        "url": "https://www.iyimserirade.org/yapay-zeka-istihdami-nasil-donusturuyor/"
+      },
+      {
+        "title": "Kapitalizmin ayna evresi: Yapay zekâ ve nicelleşmiş işçi",
+        "url": "https://www.iyimserirade.org/kapitalizmin-ayna-evresi-yapay-zeka-ve-nicellesmis-isci/"
+      },
+      {
+        "title": "Kapitalist zekâ mı? (III)",
+        "url": "https://www.iyimserirade.org/kapitalist-zeka-mi-iii/"
+      }
+    ],
     "img": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80"
   },
   {
@@ -195,8 +299,20 @@
     "eco": "Raporda bu sistemlerin ekolojik ayak izi nicel olarak değerlendirilmemiştir.",
     "labor": "Gözetim ve kontrol uygulamaları, Filistinlilerin hareket özgürlüğü ve günlük yaşamı üzerinde etkilidir.",
     "quote": "Gözetim yalnızca veriyi değil, hareket etme imkânını da etkileyebilir.",
-    "imageAlt": "Gözetim teknolojisini temsil eden temsili görsel.",
-    "img": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
+    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/Al_Khalil_Hebron_%28135198989%29.jpeg/960px-Al_Khalil_Hebron_%28135198989%29.jpeg",
+    "imageAlt": "Hebron'da bir yapının üzerine yerleştirilmiş gözetim kamerası.",
+    "imageCredit": {
+      "label": "Sete Ruiz",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Al_Khalil_Hebron_(135198989).jpeg",
+      "licenseLabel": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+    },
+    "relatedArticles": [
+      {
+        "title": "Sınıf Savaşımı Olarak “Yapay Zekâ”",
+        "url": "https://www.iyimserirade.org/sinif-savasimi-olarak-yapay-zeka/"
+      }
+    ]
   },
   {
     "id": 11,
@@ -213,8 +329,20 @@
     "eco": "Hedef belirleme sisteminin çevresel etkisi bu kaynaklarda ölçülmemiştir.",
     "labor": "Araştırma, hedefleme sürecindeki insan denetiminin rolünü ve sivil etkileri tartışıyor.",
     "quote": "Otomatik sınıflandırma, savaş kararlarında insan sorumluluğunun yerini alamaz.",
-    "imageAlt": "Hesaplama altyapısını temsil eden temsili görsel.",
-    "img": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+    "imageAlt": "Gazze kentinin saldırılar öncesi ve sonrası uydu görüntüleri.",
+    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Satellite_images_of_Gaza_before_and_after_the_Israeli_attacks.jpg/960px-Satellite_images_of_Gaza_before_and_after_the_Israeli_attacks.jpg",
+    "imageCredit": {
+      "label": "NASA / ESA",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Satellite_images_of_Gaza_before_and_after_the_Israeli_attacks.jpg",
+      "licenseLabel": "Public domain",
+      "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+    },
+    "relatedArticles": [
+      {
+        "title": "Silikon Vadisi’nin Militarizasyonu",
+        "url": "https://www.iyimserirade.org/silikon-vadisinin-militarizasyonu/"
+      }
+    ]
   },
   {
     "id": 8,
@@ -234,6 +362,12 @@
     "eco": "Toprak ve su kirliliği, toksik birikim ve ekolojik yıkım",
     "labor": "Kayıtsız yakma ve çıplak elle bakır ayrıştırma",
     "quote": "Bir cihazın yaşam döngüsü tüketiciyle bitmez; gelişmekte olan ülkelerin topraklarında son bulur.",
+    "relatedArticles": [
+      {
+        "title": "“Kapitalist Yapay Zekâ”ya Karşı Emeği, Yaşamı ve Dünyayı Savunmak",
+        "url": "https://www.iyimserirade.org/kapitalist-yapay-zekaya-karsi-emegi-yasami-ve-dunyayi-savunmak/"
+      }
+    ],
     "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c6/Day_4_Agbogloshie_%2825891018478%29.jpg/960px-Day_4_Agbogloshie_%2825891018478%29.jpg",
     "imageCredit": {
       "label": "Fairphone — Day 4: Agbogloshie",

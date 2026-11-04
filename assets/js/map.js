@@ -106,7 +106,7 @@ export function createMap(nodes, onSelect) {
                     .attr('x', 10)
                     .attr('y', 4)
                     .attr('font-size', '10px')
-                    .attr('font-family', 'JetBrains Mono')
+                    .attr('font-family', 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace')
                     .attr('class', 'pointer-events-none drop-shadow');
             });
         });

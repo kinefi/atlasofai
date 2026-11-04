@@ -11,21 +11,20 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbg: '#07090e',
-                        cardbg: '#0f131c',
-                        accent: '#ff4b3e',
-                        cyberblue: '#00f0ff',
-                        cyberpurple: '#a855f7'
+                        darkbg: '#0b1117',
+                        cardbg: '#121a22',
+                        accent: '#e8795a',
+                        cyberblue: '#78cbd0',
+                        cyberpurple: '#a78bca'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace']
+                        sans: ['Georgia', 'Times New Roman', 'serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace']
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
@@ -119,9 +118,15 @@
                         <p id="detail-desc" class="text-[11px] md:text-xs text-slate-300 leading-relaxed">
                             Açıklama yükleniyor...
                         </p>
-                        <a id="detail-wikipedia" class="inline-flex items-center gap-1.5 mt-2 text-[10px] font-mono text-cyan-400 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
-                            Vikipedi'de oku <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-                        </a>
+                        <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <a id="detail-wikipedia" class="inline-flex items-center gap-1.5 text-[10px] font-mono text-cyan-400 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
+                                Vikipedi'de oku <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            </a>
+                            <a id="detail-related-article" hidden class="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 hover:text-emerald-300" target="_blank" rel="noopener noreferrer">
+                                <span>İyimser İrade'de oku</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            </a>
+                        </div>
                         <div id="detail-sources" hidden class="mt-3 border-t border-slate-800 pt-2">
                             <h3 class="text-[9px] font-mono uppercase tracking-wider text-slate-400 mb-1">Kaynaklar</h3>
                             <ul id="detail-sources-list" class="space-y-1 text-[10px] leading-relaxed"></ul>

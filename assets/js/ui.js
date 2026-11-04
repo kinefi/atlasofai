@@ -192,10 +192,36 @@ function selectChapter(index, coords = nodes[index]?.coords, locationLabel) {
         item.append(link);
         sourceList.append(item);
     });
+    const relatedArticles = node.relatedArticles || [];
+    relatedArticles.slice(1).forEach((article) => {
+        const item = document.createElement('li');
+        const label = document.createElement('span');
+        label.className = 'text-slate-400';
+        label.textContent = 'İyimser İrade · ';
+        const link = document.createElement('a');
+        link.href = article.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'break-words text-emerald-400 hover:text-emerald-300';
+        link.textContent = article.title;
+        item.append(label, link);
+        sourceList.append(item);
+    });
     sourceSection.hidden = !sourceList.childElementCount;
     const wikipediaLink = document.getElementById('detail-wikipedia');
     wikipediaLink.href = node.wikipediaUrl || '#';
     wikipediaLink.hidden = !node.wikipediaUrl;
+    const featuredArticleLink = document.getElementById('detail-related-article');
+    featuredArticleLink.hidden = !relatedArticles.length;
+    if (relatedArticles.length) {
+        featuredArticleLink.href = relatedArticles[0].url;
+        featuredArticleLink.title = relatedArticles[0].title;
+        featuredArticleLink.setAttribute('aria-label', `İyimser İrade'de oku: ${relatedArticles[0].title}`);
+    } else {
+        featuredArticleLink.removeAttribute('href');
+        featuredArticleLink.removeAttribute('title');
+        featuredArticleLink.removeAttribute('aria-label');
+    }
     document.getElementById('metric-eco').innerText = node.eco;
     document.getElementById('metric-labor').innerText = node.labor;
     document.getElementById('detail-insight').innerText = node.quote;
