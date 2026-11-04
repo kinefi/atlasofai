@@ -1,3 +1,6 @@
+[![GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2ea44f?style=for-the-badge&logo=github)](https://kinefi.github.io/atlasofai)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)](LICENSE)
+
 # Yapay Zekanın Anatomisi ve Atlası
 
 Yapay zekanın arkasındaki gizli fiziksel altyapıları, ekolojik maliyetleri ve insan emeğini haritalandıran interaktif bir veri gazeteciliği projesi. 
@@ -43,5 +46,5 @@ Bu proje, kritik yapay zeka çalışmaları alanındaki iki temel eserin bir sen
 
 Bu çalışma, aşağıdaki akademik ve sanatsal araştırmalara dayanan eğitim ve veri gazeteciliği amaçlı bir projedir:
 
-- Crawford, K. (2021). *Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence*. Yale University Press.
-- Joler, V., & Parikka, J. (2018). *Anatomy of an AI System: The Amazon Echo as an anatomical map of human labor, data and planetary resources*. Share Lab & AI Now Institute.
+- Crawford, K. (2021). [Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence](https://katecrawford.net/atlas). Yale University Press.
+- Joler, V., & Parikka, J. (2018). [Anatomy of an AI System: The Amazon Echo as an anatomical map of human labor, data and planetary resources](https://anatomyof.ai/). Share Lab & AI Now Institute.

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomy of an AI System: Küresel Ağ & Hammadde Atlası</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#07090e',
+                        cardbg: '#0f131c',
+                        accent: '#ff4b3e',
+                        cyberblue: '#00f0ff',
+                        cyberpurple: '#a855f7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- D3.js v7 and TopoJSON Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #07090e;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* D3 Map Styling */
+        .country {
+            fill: #161e2e;
+            stroke: #1f293d;
+            stroke-width: 0.6px;
+            transition: fill 0.3s ease, stroke 0.3s ease;
+        }
+        .country:hover {
+            fill: #222f46;
+            stroke: #00f0ff;
+        }
+        .sphere {
+            fill: #090d16;
+            stroke: #1e293b;
+            stroke-width: 1px;
+        }
+        .graticule {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 0.4px;
+            stroke-dasharray: 2,4;
+            opacity: 0.6;
+        }
+        .arc-line {
+            fill: none;
+            stroke: url(#arc-gradient);
+            stroke-dasharray: 6,4;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+        
+        .pulse-node {
+            transform-origin: center;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            50% { transform: scale(1.8); opacity: 0.2; }
+            100% { transform: scale(0.8); opacity: 0.8; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #07090e; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col selection:bg-accent selection:text-white">
+
+    <!-- Header / Navigasyon -->
+    <header class="border-b border-slate-800/80 bg-darkbg/90 backdrop-blur-md sticky top-0 z-50 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center text-accent">
+                <i class="fa-solid fa-earth-americas text-base"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-sm md:text-base tracking-wide uppercase text-slate-100 flex items-center gap-2">
+                    Anatomy of an AI System <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-500/30">GIS Interactive Atlas</span>
+                </h1>
+                <p class="text-[11px] text-slate-400 hidden sm:block">Kate Crawford & Vladan Joler konseptli D3.js haritalama ve veri gazeteciliği</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button onclick="resetZoom()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-compress text-cyan-400"></i>
+                <span class="hidden md:inline">Haritayı Sıfırla</span>
+            </button>
+            <button onclick="toggleProjection()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-globe text-accent"></i>
+                <span id="proj-label">Düz Projeksiyon</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden">
+        
+        <!-- Sol: D3.js Gerçek Dünya Haritası Görselleştirmesi (8 Kolon) -->
+        <section class="lg:col-span-8 relative h-[62vh] lg:h-[calc(100vh-61px)] border-b lg:border-b-0 lg:border-r border-slate-800/80 bg-[#05070c] flex flex-col">
+            
+            <!-- Adım / Aşama Çubuğu (Scrollytelling Controls) -->
+            <div class="absolute top-4 left-4 right-4 z-20 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                <div class="flex bg-slate-950/90 backdrop-blur-md p-1 rounded-xl border border-slate-800 shadow-2xl">
+                    <button onclick="selectChapter(0)" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition flex items-center gap-2 whitespace-nowrap" data-index="0">
+                        <span class="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-400 text-[10px] font-mono flex items-center justify-center">1</span>
+                        <span>Lityum & Madenler</span>
+                    </button>
+                    <button onclick="selectChapter(1)" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap" data-index="1">
+                        <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center">2</span>
+                        <span>İşlemci Üretimi</span>
+                    </button>
+                    <button onclick="selectChapter(2)" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap" data-index="2">
+                        <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center">3</span>
+                        <span>Veri Etiketleme</span>
+                    </button>
+                    <button onclick="selectChapter(3)" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap" data-index="3">
+                        <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center">4</span>
+                        <span>Bulut Veri Merkezleri</span>
+                    </button>
+                    <button onclick="selectChapter(4)" class="chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap" data-index="4">
+                        <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center">5</span>
+                        <span>E-Atık & Yok Oluş</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- D3 SVG Container -->
+            <div id="map-holder" class="w-full h-full relative cursor-grab active:cursor-grabbing">
+                <!-- SVG Canvas JS ile buraya eklenecek -->
+            </div>
+
+            <!-- Map Overlay Legend -->
+            <div class="absolute bottom-4 left-4 z-20 bg-slate-950/80 backdrop-blur-md p-3 rounded-xl border border-slate-800 text-xs space-y-1.5 text-slate-400 font-mono">
+                <div class="flex items-center gap-2 text-slate-200 font-bold mb-1 font-sans">
+                    <i class="fa-solid fa-layer-group text-cyan-400"></i> Akış Bağlantıları
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-accent border border-white"></span>
+                    <span>Aktif Odak Noktası</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                    <span>Tedarik Zinciri Düğümü</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-0.5 bg-cyan-400 border-t border-dashed border-cyan-300"></span>
+                    <span>Küresel Hammadde & Veri Akışı</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sağ: Detaylı Medya & Bilgi Kartı Panel (4 Kolon) -->
+        <section class="lg:col-span-4 bg-cardbg flex flex-col h-[38vh] lg:h-[calc(100vh-61px)] overflow-y-auto border-t lg:border-t-0 border-slate-800">
+            
+            <!-- Görsel Alanı -->
+            <div class="relative h-48 sm:h-56 w-full bg-slate-950 overflow-hidden flex-shrink-0">
+                <img id="detail-img" src="" alt="Node Image" class="w-full h-full object-cover transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-cardbg via-cardbg/30 to-transparent"></div>
+                
+                <div class="absolute top-4 left-4 flex items-center gap-2">
+                    <span id="detail-category" class="px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-accent text-white shadow-lg uppercase tracking-wider">
+                        Hammadde
+                    </span>
+                    <span id="detail-coords" class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-slate-900/90 text-cyan-400 border border-cyan-500/30">
+                        0.0° N, 0.0° E
+                    </span>
+                </div>
+            </div>
+
+            <!-- Panel İçerik Metinleri -->
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-5">
+                <div>
+                    <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs mb-1">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="detail-location">Konum Adı</span>
+                    </div>
+                    <h2 id="detail-title" class="text-lg md:text-xl font-bold text-slate-100 tracking-tight mb-2">
+                        Başlık
+                    </h2>
+                    <p id="detail-desc" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+                        Açıklama yükleniyor...
+                    </p>
+                </div>
+
+                <!-- Metrikler Grid -->
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-leaf text-emerald-400"></i> Ekolojik Etki
+                        </div>
+                        <div id="metric-eco" class="text-xs font-semibold text-slate-200 mt-1.5 leading-tight">-</div>
+                    </div>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-hand-holding-hand text-accent"></i> İnsan Emeği
+                        </div>
+                        <div id="metric-labor" class="text-xs font-semibold text-slate-200 mt-1.5 leading-tight">-</div>
+                    </div>
+                </div>
+
+                <!-- Alıntı / Veri Gazeteciliği Notı -->
+                <div class="bg-slate-900/40 p-3.5 rounded-xl border border-slate-800 text-xs italic text-slate-400 border-l-2 border-l-cyan-400">
+                    <span id="detail-quote">"Yapay zeka soyut bir bulut değil, dünya gezegeninin fiziksel kabuğunun dönüştürülmesidir."</span>
+                    <span class="block mt-1 font-mono text-[10px] text-slate-500 not-italic">— Atlas of AI / Crawford & Joler</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JS Mantığı: D3.js + TopoJSON Harita Motoru -->
+    <script>
+        // Coğrafi Tedarik Zinciri Düğümleri (Latitude, Longitude)
+        const nodes = [
+            {
+                id: 0,
+                name: "Salar de Atacama & Kolwezi",
+                location: "Şili & Kongo Dem. Cumhuriyeti",
+                coords: [-68.2, -23.5], // [lon, lat]
+                category: "Hammadde Çıkarma",
+                title: "1. Lityum & Kobalt Madenciliği",
+                desc: "Yapay zeka çiplerinin, mobil cihazların ve veri merkezi yedek güç ünitelerinin ihtiyaç duyduğu Lityum ve Kobalt madenleri burada çıkarılır. Şili'deki Salar de Atacama tuzlasında 1 ton lityum elde etmek için 2.2 milyon litre su buharlaştırılır.",
+                eco: "Su Yataklarının Kuruması, Zehirli Atık Göletleri",
+                labor: "Ağır İş Koşulları, Asgari Ücretin Altında Tehlikeli Emek",
+                quote: "Yapay zekanın başlangıç noktası algoritmalar değil, Dünya'nın tektonik katmanlarındaki madenlerdir.",
+                img: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 1,
+                name: "TSMC Semiconductor Fab",
+                location: "Hsinchu, Tayvan",
+                coords: [120.96, 24.81],
+                category: "Yarı İletken Üretimi",
+                title: "2. Gelişmiş Mikroçip Fabrikasyonu",
+                desc: "Saf silisyum madenleri ve nadir toprak elementleri, mikroskobik ölçekte nVidia ve Apple çiplerine dönüştürülür. Çip lithography süreçleri devasa miktarda elektrik ve aşırı derece arıtılmış ultra saf su gerektirir.",
+                eco: "Günlük Yüzbinlerce Ton Su & Dev Karbon Ayak İzi",
+                labor: "7/24 Temiz Oda (Cleanroom) Mühendisliği & Vardiyalı Sistem",
+                quote: "En gelişmiş zeka, gezegenin en hassas ve enerji yoğun üretim tesislerinde şekillenir.",
+                img: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 2,
+                name: "Nairobi & Caracas Veri Merkezleri",
+                location: "Nairobi (Kenya) & Caracas (Venezuela)",
+                coords: [36.82, -1.29],
+                category: "Veri Etiketleme",
+                title: "3. Algoritmik Sömürü ve Etiketleme",
+                desc: "Yapay zeka modellerinin şiddeti, nefret söylemini tanıması veya görselleri sınıflandırması için binlerce düşük ücretli işçi her gün milyonlarca veriyi manuel olarak etiketler.",
+                eco: "Düşük Fiziksel İz / Yüksek Psikolojik Yük",
+                labor: "Saatlik 1.2$ - 2.0$ Ücret, Ağır Travmatik İçerik İnceleme",
+                quote: "Makine öğrenimi olarak adlandırdığımız şey, görünmeyen insan emeğinin anonimleştirilmesidir.",
+                img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 3,
+                name: "Data Center Alley (AWS / Azure)",
+                location: "Northern Virginia, ABD",
+                coords: [-77.48, 39.04],
+                category: "Bulut Hesaplama",
+                title: "4. Hipersosyal Veri Merkezleri & Enerji",
+                desc: "Dünyadaki internet trafiğinin ve AI model eğitimlerinin %70'inin geçtiği veri merkezleri burada yer alır. LLM modellerini eğitmek ve çalıştırmak bir şehrin yıllık elektrik ihtiyacına denk enerji harcar.",
+                eco: "Devasa Termal Isı Salınımı & Soğutma Suyu Tüketimi",
+                labor: "7/24 Altyapı ve Güvenlik Yönetimi",
+                quote: "Yapay zeka modeli eğitmek, bir uçağın dünyayı yüzlerce kez turlamasına denk karbon salar.",
+                img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 4,
+                name: "Agbogbloshie & Guiyu",
+                location: "Accra (Gana) & Guiyu (Çin)",
+                coords: [-0.22, 5.55],
+                category: "E-Atık & Yok Oluş",
+                title: "5. Elektronik Atık Mezarlığı",
+                desc: "Ömrü 2-3 yılda tükenen AI sunucuları, akıllı hoparlörler ve çipler batı ülkelerinden e-atık olarak Afrika ve Asya'daki hurdalıklara gönderilir. Kurşun ve cıva toprağa karışır.",
+                eco: "Toprak ve Nehirlerde Zehirli Ağır Metal Birikimi",
+                labor: "Kayıtsız Atık Yakma ve Çıplak Elle Bakır Ayrıştırma",
+                quote: "Bir cihazın yaşam döngüsü tüketiciyle bitmez; gelişmekte olan ülkelerin toprağında son bulur.",
+                img: "https://images.unsplash.com/photo-1532996122754-e3b4d32a0a57?auto=format&fit=crop&w=800&q=80"
+            }
+        ];
+
+        // Harita Değişkenleri
+        let width = 0, height = 0;
+        let svg, g, path, projection, zoom;
+        let isGlobe = false;
+        let worldData = null;
+        let activeIndex = 0;
+
+        function initMap() {
+            const container = document.getElementById('map-holder');
+            width = container.clientWidth;
+            height = container.clientHeight;
+
+            // SVG Oluştur
+            d3.select('#map-holder').html('');
+            svg = d3.select('#map-holder')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('class', 'w-full h-full');
+
+            // Arc Gradient Tarafı
+            const defs = svg.append('defs');
+            const grad = defs.append('linearGradient')
+                .attr('id', 'arc-gradient')
+                .attr('gradientUnits', 'userSpaceOnUse');
+            grad.append('stop').attr('offset', '0%').attr('stop-color', '#ff4b3e');
+            grad.append('stop').attr('offset', '100%').attr('stop-color', '#00f0ff');
+
+            // Projeksiyon Tanımla (Mercator or EqualEarth)
+            projection = d3.geoMercator()
+                .scale(width / 6.2)
+                .translate([width / 2, height / 1.6]);
+
+            path = d3.geoPath().projection(projection);
+
+            // Zoom Davranışı
+            zoom = d3.zoom()
+                .scaleExtent([1, 18])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+
+            g = svg.append('g');
+
+            // Okyanus Küresi Arka Planı
+            g.append('rect')
+                .attr('width', width * 4)
+                .attr('height', height * 4)
+                .attr('x', -width)
+                .attr('y', -height)
+                .attr('fill', '#070a12');
+
+            // Paralel & Meridyen Çizgileri
+            const graticule = d3.geoGraticule();
+            g.append('path')
+                .datum(graticule)
+                .attr('class', 'graticule')
+                .attr('d', path);
+
+            // World TopoJSON Yükle (Fallback GeoJSON Desteği ile)
+            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+                .then(res => res.json())
+                .then(data => {
+                    worldData = data;
+                    renderWorld();
+                })
+                .catch(err => {
+                    console.warn("CDN Harita yüklenemedi, temel coğrafi kontur oluşturuluyor:", err);
+                    renderFallbackWorld();
+                });
+        }
+
+        function renderWorld() {
+            const countries = topojson.feature(worldData, worldData.objects.countries);
+
+            // Ülke Karaları
+            g.selectAll('.country')
+                .data(countries.features)
+                .enter()
+                .append('path')
+                .attr('class', 'country')
+                .attr('d', path);
+
+            // Akış Çizgileri & Düğümler
+            drawFlowArcs();
+            drawNodes();
+            selectChapter(0);
+        }
+
+        function renderFallbackWorld() {
+            // CDN erişilemezse bile harita çizilmesi için koruma
+            g.append('path')
+                .datum({type: 'Sphere'})
+                .attr('class', 'sphere')
+                .attr('d', path);
+            
+            drawFlowArcs();
+            drawNodes();
+            selectChapter(0);
+        }
+
+        function drawFlowArcs() {
+            // Düğümler arası kavisli tedarik zinciri hatları
+            const arcsGroup = g.append('g').attr('class', 'arcs-layer');
+
+            for (let i = 0; i < nodes.length - 1; i++) {
+                const source = nodes[i].coords;
+                const target = nodes[i+1].coords;
+
+                const geoArc = {
+                    type: "LineString",
+                    coordinates: [source, target]
+                };
+
+                arcsGroup.append('path')
+                    .datum(geoArc)
+                    .attr('class', 'arc-line')
+                    .attr('d', path)
+                    .attr('stroke-width', 2);
+            }
+        }
+
+        function drawNodes() {
+            const nodesGroup = g.append('g').attr('class', 'nodes-layer');
+
+            nodes.forEach((node, idx) => {
+                const [x, y] = projection(node.coords);
+
+                const nodeG = nodesGroup.append('g')
+                    .attr('transform', `translate(${x}, ${y})`)
+                    .attr('class', 'cursor-pointer')
+                    .on('click', () => selectChapter(idx));
+
+                // Pulse efekti
+                nodeG.append('circle')
+                    .attr('r', 12)
+                    .attr('fill', '#00f0ff')
+                    .attr('opacity', 0.2)
+                    .attr('class', 'pulse-node');
+
+                // Dış Halka
+                nodeG.append('circle')
+                    .attr('r', 6)
+                    .attr('fill', '#0a0e17')
+                    .attr('stroke', '#00f0ff')
+                    .attr('stroke-width', 2);
+
+                // İç Nokta
+                nodeG.append('circle')
+                    .attr('r', 2.5)
+                    .attr('fill', '#ffffff');
+
+                // Metin Etiketi
+                nodeG.append('text')
+                    .text(`${idx + 1}. ${node.name.split('&')[0]}`)
+                    .attr('x', 10)
+                    .attr('y', 4)
+                    .attr('fill', '#cbd5e1')
+                    .attr('font-size', '10px')
+                    .attr('font-family', 'JetBrains Mono')
+                    .attr('class', 'pointer-events-none drop-shadow');
+            });
+        }
+
+        function selectChapter(index) {
+            activeIndex = index;
+            const node = nodes[index];
+
+            // Tab buton aktiflik durumları
+            document.querySelectorAll('.chap-btn').forEach((btn, idx) => {
+                if (idx === index) {
+                    btn.className = "chap-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition flex items-center gap-2 whitespace-nowrap shadow-lg";
+                } else {
+                    btn.className = "chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap";
+                }
+            });
+
+            // Sağ Paneli Güncelle
+            document.getElementById('detail-img').src = node.img;
+            document.getElementById('detail-category').innerText = node.category;
+            document.getElementById('detail-coords').innerText = `${node.coords[1]}°, ${node.coords[0]}°`;
+            document.getElementById('detail-location').innerText = node.location;
+            document.getElementById('detail-title').innerText = node.title;
+            document.getElementById('detail-desc').innerText = node.desc;
+            document.getElementById('metric-eco').innerText = node.eco;
+            document.getElementById('metric-labor').innerText = node.labor;
+            document.getElementById('detail-quote').innerText = `"${node.quote}"`;
+
+            // Yumuşak D3 Zoom Geçişi (Smooth Geographic Zoom)
+            const [x, y] = projection(node.coords);
+            const scale = 4.5;
+            const translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+            svg.transition()
+                .duration(1600)
+                .ease(d3.easeCubicInOut)
+                .call(
+                    zoom.transform,
+                    d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+                );
+        }
+
+        function resetZoom() {
+            svg.transition()
+                .duration(1200)
+                .call(zoom.transform, d3.zoomIdentity);
+        }
+
+        function toggleProjection() {
+            isGlobe = !isGlobe;
+            document.getElementById('proj-label').innerText = isGlobe ? "Küre Görünümü" : "Düz Projeksiyon";
+
+            if (isGlobe) {
+                projection = d3.geoOrthographic()
+                    .scale(height / 2.3)
+                    .translate([width / 2, height / 2]);
+            } else {
+                projection = d3.geoMercator()
+                    .scale(width / 6.2)
+                    .translate([width / 2, height / 1.6]);
+            }
+
+            path.projection(projection);
+            g.selectAll('path').attr('d', path);
+            
+            // Düğümleri yeniden konumlandır
+            g.selectAll('.nodes-layer').remove();
+            g.selectAll('.arcs-layer').remove();
+            drawFlowArcs();
+            drawNodes();
+            selectChapter(activeIndex);
+        }
+
+        window.onload = function() {
+            initMap();
+        };
+
+        window.onresize = function() {
+            initMap();
+        };
+    </script>
+</body>
+</html>
