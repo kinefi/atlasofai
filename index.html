@@ -31,47 +31,47 @@
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col selection:bg-accent selection:text-white">
+<body class="bg-darkbg text-slate-100 h-dvh overflow-hidden flex flex-col selection:bg-accent selection:text-white">
 
     <!-- Header / Navigasyon -->
-    <header class="border-b border-slate-800/80 bg-darkbg/90 backdrop-blur-md sticky top-0 z-50 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
+    <header class="shrink-0 border-b border-slate-800/80 bg-darkbg/90 backdrop-blur-md sticky top-0 z-50 px-3 py-2 sm:px-4 md:px-6 sm:py-3 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex min-w-0 items-center space-x-3">
             <div class="w-9 h-9 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center text-accent">
                 <i class="fa-solid fa-earth-americas text-base"></i>
             </div>
             <div>
                 <h1 class="font-bold text-sm md:text-base tracking-wide uppercase text-slate-100 flex items-center gap-2">
-                    Anatomy of an AI System <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-500/30">GIS Interactive Atlas</span>
+                    Anatomy of an AI System <span class="hidden sm:inline-flex text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-500/30">GIS Interactive Atlas</span>
                 </h1>
                 <p class="text-[11px] text-slate-400 hidden sm:block">Kate Crawford & Vladan Joler konseptli D3.js haritalama ve veri gazeteciliği</p>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
-            <a href="https://www.github.com/kinefi/atlasofai" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+        <nav aria-label="Bağlantılar" class="grid grid-cols-2 gap-2 lg:flex lg:items-center">
+            <a href="https://www.github.com/kinefi/atlasofai" target="_blank" rel="noopener" class="min-h-9 justify-center px-2 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[10px] sm:text-xs hover:border-slate-700 transition flex items-center gap-1.5 text-center">
                 <i class="fa-brands fa-github text-cyan-400"></i>
                 <span>Açık kaynak</span>
             </a>
-            <a href="https://www.iyimserirade.org/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+            <a href="https://www.iyimserirade.org/" target="_blank" rel="noopener noreferrer" class="min-h-9 justify-center px-2 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[10px] sm:text-xs hover:border-slate-700 transition flex items-center gap-1.5 text-center">
                 <i class="fa-solid fa-leaf text-emerald-400" aria-hidden="true"></i>
                 <span>İyimser İrade</span>
             </a>
-            <a href="https://katecrawford.net/atlas" target="_blank" rel="noopener noreferrer" aria-label="Atlas of AI kitabı" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+            <a href="https://katecrawford.net/atlas" target="_blank" rel="noopener noreferrer" aria-label="Atlas of AI kitabı" class="min-h-9 justify-center px-2 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[10px] sm:text-xs hover:border-slate-700 transition flex items-center gap-1.5 text-center">
                 <i class="fa-solid fa-book-open text-cyan-400" aria-hidden="true"></i>
                 <span>Atlas of AI</span>
             </a>
-            <a href="https://anatomyof.ai/" target="_blank" rel="noopener noreferrer" aria-label="Anatomy of an AI System araştırması" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-xs hover:border-slate-700 transition flex items-center gap-1.5">
+            <a href="https://anatomyof.ai/" target="_blank" rel="noopener noreferrer" aria-label="Anatomy of an AI System araştırması" class="min-h-9 justify-center px-2 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[10px] sm:text-xs hover:border-slate-700 transition flex items-center gap-1.5 text-center">
                 <i class="fa-solid fa-diagram-project text-cyan-400" aria-hidden="true"></i>
                 <span>Anatomy of an AI System</span>
             </a>
-        </div>
+        </nav>
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 min-h-0 grid grid-cols-1 grid-rows-[38%_62%] lg:grid-cols-12 lg:grid-rows-1 relative overflow-hidden">
-        
-        <aside class="lg:col-span-3 bg-cardbg flex flex-col h-full min-h-0 border-t lg:border-t-0 border-r border-slate-800 order-first lg:order-none">
-            <div class="p-3 border-b border-slate-800 bg-slate-950/60 flex flex-col min-h-0">
+    <main id="atlas-layout" class="atlas-layout flex-1 min-h-0 relative overflow-hidden">
+        <div id="atlas-panels" class="atlas-panels">
+            <aside id="stage-panel" class="stage-panel bg-cardbg flex flex-col min-h-0 border-r border-slate-800">
+                <div class="min-w-0 p-2 sm:p-3 border-b border-slate-800 bg-slate-950/60 flex flex-col min-h-0 overflow-hidden">
                 <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400 mb-2">Aşamalar</div>
                 <div class="flex items-center gap-2 mb-3">
                     <button id="previous-chapter" onclick="previousChapter()" type="button" title="Önceki aşama" aria-label="Önceki aşama" class="w-9 h-9 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition">
@@ -85,12 +85,11 @@
                     </button>
                     <span class="ml-auto text-[10px] font-mono text-slate-500">4 sn</span>
                 </div>
-                <div id="category-filters" class="category-filters" aria-label="Harita katmanları"></div>
                 <div id="chapter-bar" class="chapter-bar flex flex-col gap-2" aria-label="Aşama anlatısı"></div>
             </div>
-
-            <div class="flex-1 overflow-y-auto">
-                <div class="relative h-36 sm:h-40 w-full bg-slate-950 overflow-hidden flex-shrink-0">
+            </aside>
+            <aside id="detail-panel" class="detail-panel min-w-0 min-h-0 bg-cardbg border-r border-slate-800 overflow-y-auto">
+                <div class="relative h-24 sm:h-32 lg:h-36 w-full bg-slate-950 overflow-hidden flex-shrink-0">
                     <img id="detail-img" src="" alt="Aşama görselini büyüt" role="button" tabindex="0" onclick="openImageLightbox()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openImageLightbox()}" class="w-full h-full object-cover transition duration-700 cursor-zoom-in">
                     <div class="absolute inset-0 bg-gradient-to-t from-cardbg via-cardbg/30 to-transparent"></div>
                     <div id="detail-image-credit" hidden class="absolute bottom-2 right-2 z-10 rounded bg-slate-950/80 px-2 py-1 text-[9px] font-mono text-slate-200">
@@ -108,7 +107,7 @@
                     </div>
                 </div>
 
-                <div class="p-3.5 flex-1 flex flex-col justify-between space-y-3">
+                <div class="p-2 sm:p-3.5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
                         <div class="flex items-center gap-2 text-cyan-400 font-mono text-[10px] mb-1">
                             <i class="fa-solid fa-location-dot"></i>
@@ -149,10 +148,10 @@
                         <span id="detail-insight"></span>
                     </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
+        </div>
 
-        <section class="lg:col-span-9 relative h-full min-h-0 border-b lg:border-b-0 lg:border-l border-slate-800/80 bg-[#05070c] flex flex-col order-last lg:order-none">
+        <section class="map-panel relative min-h-0 border-t lg:border-t-0 lg:border-l border-slate-800/80 bg-[#05070c] flex flex-col">
             <div id="map-holder" class="w-full h-full relative cursor-grab active:cursor-grabbing">
                 <!-- SVG Canvas JS ile buraya eklenecek -->
             </div>
@@ -190,6 +189,9 @@
                 </div>
             </div>
         </section>
+        <button id="detail-panel-toggle" type="button" class="detail-panel-toggle" aria-controls="detail-panel" aria-expanded="true" aria-label="Bilgi panelini kapat" title="Bilgi panelini kapat">
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
     </main>
 
     <dialog id="image-lightbox" class="image-lightbox" aria-label="Aşama görseli">

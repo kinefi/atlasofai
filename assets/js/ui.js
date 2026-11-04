@@ -63,37 +63,16 @@ function toggleSlideshow() {
     icon.className = isPlaying ? 'fa-solid fa-play' : 'fa-solid fa-pause';
 }
 
-function renderCategoryFilters() {
-    const filterBar = document.getElementById('category-filters');
-    const layers = [...new Set(nodes.map((node) => node.layer || 'Diğer'))];
-    if (!filtersInitialized) {
-        activeLayers = new Set(layers);
-        filtersInitialized = true;
-    }
-
-    filterBar.replaceChildren();
-    layers.forEach((layer) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = `category-filter ${activeLayers.has(layer) ? 'is-active' : ''}`;
-        button.setAttribute('aria-pressed', String(activeLayers.has(layer)));
-        button.dataset.layer = layer;
-        button.textContent = layer;
-        button.addEventListener('click', () => {
-            const layer = button.dataset.layer;
-            if (activeLayers.has(layer)) activeLayers.delete(layer);
-            else activeLayers.add(layer);
-            renderCategoryFilters();
-            applyFilters();
-        });
-        filterBar.append(button);
-    });
-}
-
 function applyFilters() {
     const visibleNodes = nodes.filter((node) => activeLayers.has(node.layer || 'Diğer'));
     const visibleIds = visibleNodes.map((node) => node.id);
     mapController.setVisibleNodeIds(visibleIds);
+
+    document.querySelectorAll('.category-filter').forEach((button) => {
+        const active = activeLayers.has(button.dataset.layer);
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+    });
 
     document.querySelectorAll('.chap-btn').forEach((button) => {
         const node = nodes[Number(button.dataset.index)];
@@ -107,29 +86,55 @@ function applyFilters() {
 
 function renderChapterButtons() {
     const chapterBar = document.getElementById('chapter-bar');
+    const layers = [...new Set(nodes.map((node) => node.layer || 'Diğer'))];
+    if (!filtersInitialized) {
+        activeLayers = new Set(layers);
+        filtersInitialized = true;
+    }
+
     chapterBar.replaceChildren();
     nodes.forEach((node, index) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'chap-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 whitespace-nowrap';
-        button.dataset.index = index;
-        button.setAttribute('aria-current', 'false');
+        const row = document.createElement('div');
+        row.className = 'flex min-w-0 items-center gap-2';
+
+        const chapterButton = document.createElement('button');
+        chapterButton.type = 'button';
+        chapterButton.className = 'chap-btn min-w-0 flex-1 px-2 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-2 text-left';
+        chapterButton.dataset.index = index;
+        chapterButton.setAttribute('aria-current', 'false');
 
         const number = document.createElement('span');
-        number.className = 'w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center';
+        number.className = 'w-5 h-5 shrink-0 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono flex items-center justify-center';
         number.textContent = String(index + 1);
 
         const label = document.createElement('span');
-        label.className = 'block text-left';
-        label.append(document.createTextNode(node.title));
+        label.className = 'min-w-0 flex-1 truncate';
+        label.textContent = node.title;
         const location = document.createElement('small');
-        location.className = 'block text-[9px] text-slate-500';
+        location.className = 'block truncate text-[9px] text-slate-500';
         location.textContent = node.location;
         label.append(location);
 
-        button.append(number, label);
-        button.addEventListener('click', () => selectChapter(Number(button.dataset.index)));
-        chapterBar.append(button);
+        chapterButton.append(number, label);
+        chapterButton.addEventListener('click', () => selectChapter(Number(chapterButton.dataset.index)));
+
+        const layer = node.layer || 'Diğer';
+        const filterButton = document.createElement('button');
+        filterButton.type = 'button';
+        filterButton.className = `category-filter shrink-0 ${activeLayers.has(layer) ? 'is-active' : ''}`;
+        filterButton.dataset.layer = layer;
+        filterButton.textContent = layer;
+        filterButton.title = `${layer} katmanını filtrele`;
+        filterButton.setAttribute('aria-label', `${layer} katmanını göster veya gizle`);
+        filterButton.setAttribute('aria-pressed', String(activeLayers.has(layer)));
+        filterButton.addEventListener('click', () => {
+            if (activeLayers.has(layer)) activeLayers.delete(layer);
+            else activeLayers.add(layer);
+            applyFilters();
+        });
+
+        row.append(chapterButton, filterButton);
+        chapterBar.append(row);
     });
 
     if (storyObserver) storyObserver.disconnect();
@@ -215,13 +220,27 @@ function toggleProjection() {
     document.getElementById('proj-label').innerText = isGlobe ? 'Küre Görünümü' : 'Düz Projeksiyon';
 }
 
+function toggleDetailPanel() {
+    const layout = document.getElementById('atlas-layout');
+    const button = document.getElementById('detail-panel-toggle');
+    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+    const nextExpanded = !isExpanded;
+
+    layout.classList.toggle('detail-collapsed', !nextExpanded);
+    button.setAttribute('aria-expanded', String(nextExpanded));
+    button.setAttribute('aria-label', nextExpanded ? 'Bilgi panelini kapat' : 'Bilgi panelini aç');
+    button.title = nextExpanded ? 'Bilgi panelini kapat' : 'Bilgi panelini aç';
+    button.querySelector('i').className = `fa-solid fa-chevron-${nextExpanded ? 'left' : 'right'}`;
+    requestAnimationFrame(() => mapController?.resize());
+}
+
 async function initialize() {
     try {
         await loadNodes();
-        renderCategoryFilters();
         renderChapterButtons();
         mapController = createMap(nodes, selectChapter);
         selectChapter(0);
+        document.getElementById('detail-panel-toggle').addEventListener('click', toggleDetailPanel);
         document.getElementById('image-lightbox').addEventListener('click', (event) => {
             if (event.target === event.currentTarget) closeImageLightbox();
         });
